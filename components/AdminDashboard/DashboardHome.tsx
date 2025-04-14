@@ -28,14 +28,25 @@ import {
 } from "@/components/ui/table";
 import { useGetAllRequest } from "@/hooks/request.hooks";
 import { TRequest } from "@/types";
+import { ViewTimeline } from "./view-timeline";
+import RequestListingsComponent from "../Modal/request-listing-modal";
+import TableLoading from "../shared/TableLoading";
 
 type SortField = "date" | "budget";
 
+// todo : filter button
+// todo : sort button
+// todo : search functionality
+
 const DashboardHome = () => {
+  const [selectedRequestForTimeline, setSelectedRequestForTimeline] =
+    useState<null | TRequest>(null);
+  const [isListingOpen, setIsListingOpen] = useState(false);
   const limit = 5;
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField>("date");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isTimelineOpen, setIsTimelineOpen] = useState(false);
   const { data, isLoading } = useGetAllRequest({
     searchTerm,
     sortBy: sortField,
@@ -54,7 +65,8 @@ const DashboardHome = () => {
       setCurrentPage((prev) => prev - 1);
     }
   };
-  if (isLoading) return <p>Loading....</p>;
+
+  // const handleSubmit = () => {};
 
   return (
     <div>
@@ -93,87 +105,99 @@ const DashboardHome = () => {
       </div>
 
       <div className="overflow-x-auto -mx-4 sm:mx-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="min-w-[200px]">User</TableHead>
-              <TableHead className="min-w-[250px]">Car Details</TableHead>
-              <TableHead className="min-w-[150px]">Date</TableHead>
-              <TableHead className="min-w-[200px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data?.data?.map((request: TRequest) => (
-              <TableRow key={request._id}>
-                <TableCell>
-                  <div>
-                    <p className="font-semibold">{request.userId.fullName}</p>
-                    <p className="text-sm text-[rgb(var(--color-text-light))]">
-                      {request.userId.email}
-                    </p>
-                    <p className="text-sm font-medium mt-1">car listings</p>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="space-y-2">
-                    {request.searchType === "specific" ? (
-                      <div className="flex items-center gap-2">
-                        <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
-                        <span className="font-semibold capitalize">
-                          {request.make} {request.model}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
-                        <span className="font-semibold">
-                          Multiple Car Types
-                        </span>
-                      </div>
-                    )}
-                    <p className="text-sm font-medium">
-                      Budget: £{request.budget[0].toLocaleString()} - £
-                      {request.budget[1].toLocaleString()}
-                    </p>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div>
-                    <p className="font-medium">
-                      {new Date(request.createdAt).toLocaleString("en-GB", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                    <p className="text-sm text-[rgb(var(--color-text-light))]">
-                      {new Date(request.createdAt).toLocaleString("en-GB", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      className="bg-blue-500 hover:bg-blue-600 text-white"
-                    >
-                      View Timeline
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-blue-500 hover:bg-blue-600 text-white"
-                    >
-                      Add Listing
-                    </Button>
-                  </div>
-                </TableCell>
+        {isLoading ? (
+          <TableLoading />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="min-w-[200px]">User</TableHead>
+                <TableHead className="min-w-[250px]">Car Details</TableHead>
+                <TableHead className="min-w-[150px]">Date</TableHead>
+                <TableHead className="min-w-[200px]">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {data?.data?.map((request: TRequest) => (
+                <TableRow key={request._id}>
+                  <TableCell>
+                    <div>
+                      <p className="font-semibold">{request.userId.fullName}</p>
+                      <p className="text-sm text-[rgb(var(--color-text-light))]">
+                        {request.userId.email}
+                      </p>
+                      <p className="text-sm font-medium mt-1">car listings</p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-2">
+                      {request.searchType === "specific" ? (
+                        <div className="flex items-center gap-2">
+                          <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
+                          <span className="font-semibold capitalize">
+                            {request.make} {request.model}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
+                          <span className="font-semibold">
+                            Multiple Car Types
+                          </span>
+                        </div>
+                      )}
+                      <p className="text-sm font-medium">
+                        Budget: £{request.budget[0].toLocaleString()} - £
+                        {request.budget[1].toLocaleString()}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <p className="font-medium">
+                        {new Date(request.createdAt).toLocaleString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </p>
+                      <p className="text-sm text-[rgb(var(--color-text-light))]">
+                        {new Date(request.createdAt).toLocaleString("en-GB", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="bg-blue-500 hover:bg-blue-600 text-white"
+                        onClick={() => {
+                          setSelectedRequestForTimeline(request);
+                          setIsTimelineOpen(true);
+                        }}
+                      >
+                        View Timeline
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-blue-500 hover:bg-blue-600 text-white"
+                        onClick={() => {
+                          setSelectedRequestForTimeline(request);
+                          setIsListingOpen(true);
+                        }}
+                      >
+                        Add Listing
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
       <div className="flex items-center justify-center mt-12 gap-3">
         <Button
@@ -196,6 +220,21 @@ const DashboardHome = () => {
           <ArrowRight />
         </Button>
       </div>
+      {selectedRequestForTimeline && (
+        <ViewTimeline
+          open={isTimelineOpen}
+          onOpenChange={setIsTimelineOpen}
+          request={selectedRequestForTimeline}
+        />
+      )}
+
+      {selectedRequestForTimeline && (
+        <RequestListingsComponent
+          request={selectedRequestForTimeline}
+          open={isListingOpen}
+          onOpenChange={setIsListingOpen}
+        />
+      )}
     </div>
   );
 };

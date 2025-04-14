@@ -26,4 +26,64 @@ export interface TRequest {
   createdAt: string;
   _id: string;
   searchType: string;
+  status: string;
+  timeline: {
+    status: string;
+    date: Date;
+    note: string;
+  }[];
 }
+
+export type TAddListingForm = {
+  make: string;
+  model: string;
+  year: string | number;
+  mileage: string;
+  fuel: string;
+  transmission: string;
+  color: string;
+  engineSize: string;
+  registration: string;
+  regDate: string;
+  owners: string;
+  motExpiry: string;
+  vatStatus: string;
+  additionalDetails: string;
+  auctionHouse: string;
+  auctionDate: string;
+  hammerPrice: string;
+  allInPrice: string;
+  images: File[];
+  additionalDealerDetails: string;
+  carCondition: string;
+  dealerUrl: string;
+};
+
+export type TListing = {
+  _id: string;
+  status: string;
+  userId: TUser;
+  requestId: TRequest;
+  make: string;
+  model: string;
+  year: number;
+  mileage: string;
+  fuel: string;
+  transmission: string;
+  color: string;
+  engineSize: string;
+  registration: string;
+  regDate: string; // ISO date string (e.g., "2020-06-15")
+  owners: string;
+  motExpiry: string; // ISO date string
+  vatStatus: string;
+  additionalDetails: string;
+  auctionHouse: string;
+  auctionDate: string; // ISO date string
+  hammerPrice: string; // or number if you're parsing to numeric
+  allInPrice: string; // or number
+  images: string[]; // Array of image filenames or URLs
+  additionalDealerDetails: string;
+  carCondition: string;
+  dealerUrl: string;
+};
