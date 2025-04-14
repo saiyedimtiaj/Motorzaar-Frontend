@@ -2,6 +2,7 @@
 
 import SignupForm from "@/components/Forms/SignupForm";
 import { Card } from "@/components/ui/card";
+import { Suspense } from "react";
 
 export default function SignupPage() {
   return (
@@ -13,7 +14,9 @@ export default function SignupPage() {
             Join us to find your perfect car
           </p>
         </div>
-        <SignupForm />
+        <Suspense fallback={<div>Loading form...</div>}>
+          <SignupForm />
+        </Suspense>
       </Card>
     </div>
   );

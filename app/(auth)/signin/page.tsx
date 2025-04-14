@@ -1,7 +1,7 @@
 import LoginForm from "@/components/Forms/LoginForm";
 import { Card } from "@/components/ui/card";
 import { Car } from "lucide-react";
-import React from "react";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
@@ -34,7 +34,9 @@ const page = () => {
           </div>
 
           {/* Login in form is a client component */}
-          <LoginForm />
+          <Suspense fallback={<div>Loading form...</div>}>
+            <LoginForm />
+          </Suspense>
         </Card>
       </div>
     </div>

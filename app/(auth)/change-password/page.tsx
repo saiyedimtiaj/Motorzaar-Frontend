@@ -2,7 +2,7 @@ import ChangePassword from "@/components/Forms/ChangePassword";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
@@ -17,8 +17,9 @@ const page = () => {
             Make sure it’s strong and not previously used.
           </p>
         </div>
-
-        <ChangePassword />
+        <Suspense fallback={<div>Loading form...</div>}>
+          <ChangePassword />
+        </Suspense>
 
         <div className="text-center">
           <Link
