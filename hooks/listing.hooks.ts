@@ -1,7 +1,9 @@
 import {
   createNewListing,
   getListingByRequestId,
+  getListingForUser,
   getOfferListing,
+  getOfferWithListing,
   updateListingStatus,
 } from "@/services/listing.services";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -41,5 +43,19 @@ export const useGetOfferedListing = ({
   return useQuery({
     queryKey: ["GET_OFFERED_LISTING", searchTerm, sortBy, page, limit],
     queryFn: () => getOfferListing({ searchTerm, sortBy, page, limit }),
+  });
+};
+
+export const useGetListingForRequest = () => {
+  return useQuery({
+    queryKey: ["LISTING_FOR_USER"],
+    queryFn: async () => await getListingForUser(),
+  });
+};
+
+export const useGetOfferedWithListing = (id: string) => {
+  return useQuery({
+    queryKey: ["OFFERED_WITH_LISTING_____"],
+    queryFn: async () => await getOfferWithListing(id),
   });
 };

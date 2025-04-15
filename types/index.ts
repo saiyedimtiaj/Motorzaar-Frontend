@@ -4,6 +4,7 @@ export type TUser = {
   role: string;
   _id: string;
   createdAt?: string;
+  phone: string;
 };
 
 export interface TRequest {
@@ -62,8 +63,8 @@ export type TAddListingForm = {
 export type TListing = {
   _id: string;
   status: string;
-  userId: TUser;
-  requestId: TRequest;
+  userId: string;
+  requestId: string | TRequest;
   make: string;
   model: string;
   year: number;
@@ -86,4 +87,15 @@ export type TListing = {
   additionalDealerDetails: string;
   carCondition: string;
   dealerUrl: string;
+  count?: number;
+};
+
+export type TAddDEpositForm = {
+  userId: string;
+  dealerId: string | TUser;
+  listingId: string;
+  requestId: string;
+  status: string;
+  allInPrice: number;
+  _id?: string;
 };

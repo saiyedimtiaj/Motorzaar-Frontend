@@ -8,22 +8,35 @@ import { Card } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { TListing } from "@/types";
+import { TAddDEpositForm, TListing } from "@/types";
+import {
+  useAddDeposit,
+  useGetDepositDetails,
+} from "@/hooks/dealerRequest.hooks";
+import { useUser } from "@/lib/user.provider";
 
 interface ViewOfferDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   offer: TListing;
+  refetchListing: () => void;
 }
 
 export default function ViewOfferDialog({
   open,
   onOpenChange,
   offer,
+  refetchListing,
 }: ViewOfferDialogProps) {
   const [allInPrice, setAllInPrice] = useState("");
+  const {
+    data,
+    isLoading,
+    refetch: refetchDepositDEtails,
+  } = useGetDepositDetails(offer?._id);
+  const { user } = useUser();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate, isPending } = useAddDeposit();
   const { timeLeft } = useCountdown(
     new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
   );
@@ -32,15 +45,31 @@ export default function ViewOfferDialog({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     const price = parseFloat(allInPrice);
     if (isNaN(price) || price <= 0) {
       toast.error("Please enter a valid price");
-      setIsSubmitting(false);
       return;
     }
-    onOpenChange(false);
-    setIsSubmitting(false);
+    const formData: TAddDEpositForm = {
+      dealerId: user?._id as string,
+      listingId: offer?._id,
+      userId: offer?.userId,
+      requestId: offer?.requestId as string,
+      status: "Deposit Paid",
+      allInPrice: Number(allInPrice),
+    };
+    mutate(formData, {
+      onSuccess: (data) => {
+        if (data?.success) {
+          refetchListing();
+          refetchDepositDEtails();
+          toast.success(data?.message);
+          onOpenChange(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+    });
   };
 
   const handleImageScroll = (direction: "prev" | "next") => {
@@ -290,18 +319,31 @@ export default function ViewOfferDialog({
               </div>
               <div>
                 <Label htmlFor="allInPrice">Your All-in Price (£)</Label>
-                <Input
-                  id="allInPrice"
-                  type="number"
-                  value={allInPrice}
-                  onChange={(e) => setAllInPrice(e.target.value)}
-                  placeholder="Enter your all-in price"
-                  className="text-lg bg-white"
-                  required
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  This should include your margin and all fees
-                </p>
+                {isLoading ? (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-6 w-32 bg-gray-300 rounded-md"></div>
+                    <div className="h-4 w-64 bg-gray-200 rounded-md"></div>
+                  </div>
+                ) : data?.data ? (
+                  <p className="text-xl font-semibold">
+                    {data?.data?.allInPrice}
+                  </p>
+                ) : (
+                  <>
+                    <Input
+                      id="allInPrice"
+                      type="number"
+                      value={allInPrice}
+                      onChange={(e) => setAllInPrice(e.target.value)}
+                      placeholder="Enter your all-in price"
+                      className="text-lg bg-white"
+                      required
+                    />
+                    <p className="text-sm text-gray-500 mt-1">
+                      This should include your margin and all fees
+                    </p>
+                  </>
+                )}
               </div>
               <div className="flex flex-col md:flex-row justify-end gap-4">
                 <Button
@@ -314,9 +356,9 @@ export default function ViewOfferDialog({
                 <Button
                   type="submit"
                   className="bg-blue-600 hover:bg-blue-700"
-                  disabled={isSubmitting}
+                  disabled={isPending}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Price"}
+                  {isPending ? "Submitting..." : "Submit Price"}
                 </Button>
               </div>
             </form>

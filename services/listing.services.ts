@@ -50,3 +50,21 @@ export const getOfferListing = async ({
     return err?.response?.data;
   }
 };
+
+export const getListingForUser = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/listing`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
+export const getOfferWithListing = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/listing/listing-offer/${id}`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};

@@ -6,8 +6,14 @@ import { Card } from "../ui/card";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { toast } from "../ui/custom-toast";
+import { useMutation } from "@tanstack/react-query";
+import { sendDealerContact } from "@/services/email.services";
+import { Loader2 } from "lucide-react";
 
 const DealerSignUp = () => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: sendDealerContact,
+  });
   const [formData, setFormData] = useState({
     dealershipName: "",
     contactName: "",
@@ -18,13 +24,15 @@ const DealerSignUp = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Thank you for your interest! We will be in touch shortly.");
-    setFormData({
-      dealershipName: "",
-      contactName: "",
-      email: "",
-      phone: "",
-      message: "",
+    mutate(formData, {
+      onSuccess: (data) => {
+        console.log(data);
+        if (data?.success) {
+          toast.success(data?.message);
+        } else {
+          toast.error(data?.message);
+        }
+      },
     });
   };
   return (
@@ -105,7 +113,14 @@ const DealerSignUp = () => {
               </div>
             </div>
             <Button type="submit" className="w-full" size="lg">
-              Submit Application
+              {isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  Sending...
+                </span>
+              ) : (
+                "Submit Application"
+              )}
             </Button>
           </form>
         </Card>

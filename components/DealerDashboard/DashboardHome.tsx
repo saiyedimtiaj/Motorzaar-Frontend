@@ -64,7 +64,11 @@ const DashboardHome = () => {
   const [offerModalOpen, setOfferModalOpen] = useState(false);
   const [listingOffer, setListingiOffer] = useState<TListing | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading } = useGetOfferedListing({
+  const {
+    data,
+    isLoading,
+    refetch: refetchListing,
+  } = useGetOfferedListing({
     searchTerm,
     sortBy: sortField,
     page: currentPage,
@@ -82,8 +86,6 @@ const DashboardHome = () => {
       setCurrentPage((prev) => prev - 1);
     }
   };
-
-  console.log(data);
 
   // const handleSubmit = () => {};
 
@@ -253,6 +255,7 @@ const DashboardHome = () => {
           offer={listingOffer}
           onOpenChange={setOfferModalOpen}
           open={offerModalOpen}
+          refetchListing={refetchListing}
         />
       )}
     </Card>
