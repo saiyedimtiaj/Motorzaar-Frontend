@@ -31,7 +31,7 @@ const Benefits = () => {
   ];
   return (
     <section className="py-16 bg-[rgb(var(--color-bg-light))]">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto px-3 md:px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             Why Partner With Us

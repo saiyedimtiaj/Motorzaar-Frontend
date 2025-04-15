@@ -55,7 +55,7 @@ const Steps = () => {
 
   return (
     <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto px-3 md:px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6">How It Works</h2>
           <p className="text-lg lg:text-xl font-semibold text-[rgb(var(--color-text-light))]">
@@ -82,12 +82,12 @@ const Steps = () => {
                     {step.description}
                   </p>
                 </div>
-                <div className="md:w-2/3 p-8 bg-gradient-to-br from-blue-50 to-white border-l-2 border-[rgb(var(--color-border))]">
-                  <div className="grid grid-cols-2 gap-6">
+                <div className="md:w-2/3 px-4 py-7 md:p-8 bg-gradient-to-br from-blue-50 to-white border-l-2 border-[rgb(var(--color-border))]">
+                  <div className="grid md:grid-cols-2 gap-3 md:gap-6">
                     {step.details.map((detail, i) => (
                       <div
                         key={i}
-                        className="bg-white p-4 rounded-xl border border-[rgb(var(--color-border)] shadow-sm hover:shadow-md transition-all duration-300 group"
+                        className="bg-white p-4 rounded-sm md:rounded-xl border border-[rgb(var(--color-border)] shadow-sm hover:shadow-sm transition-all duration-300 group"
                       >
                         <div className="flex items-start gap-3">
                           <div className="w-6 h-6 rounded-full bg-[rgb(var(--color-cta)_/_0.1)] flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-[rgb(var(--color-cta))] group-hover:scale-110">

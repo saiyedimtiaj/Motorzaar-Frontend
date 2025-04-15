@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const Hero = () => {
   return (
-    <section className="relative h-full md:h-[550px] bg-[rgb(var(--color-primary))] text-[rgb(var(--color-text-white))] rounded-[20px] md:rounded-[3rem] overflow-hidden ml-3 mr-0 md:mx-6 my-6">
+    <section className="relative h-full md:h-[550px] bg-[rgb(var(--color-primary))] text-[rgb(var(--color-text-white))] rounded-[20px] md:rounded-[3rem] overflow-hidden mx-3 md:mx-6 my-6">
       <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-8 lg:px-12">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="w-full lg:w-1/2">

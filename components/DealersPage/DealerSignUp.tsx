@@ -29,7 +29,7 @@ const DealerSignUp = () => {
   };
   return (
     <section id="signup-form" className="py-16 bg-white">
-      <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="max-w-3xl mx-auto px-3 md:px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             Join Our Network
@@ -38,7 +38,7 @@ const DealerSignUp = () => {
             Fill out the form below and our team will get in touch with you
           </p>
         </div>
-        <Card className="p-8 rounded-2xl border-2 border-[rgb(var(--color-border))]">
+        <Card className="px-4 py-8 md:p-8 rounded-2xl border-2 border-[rgb(var(--color-border))]">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div>

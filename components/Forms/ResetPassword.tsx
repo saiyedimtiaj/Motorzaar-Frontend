@@ -33,13 +33,27 @@ const ResetPassword = () => {
     <div>
       <div className="text-center">
         <h1 className="text-3xl font-bold mb-2">Reset Password</h1>
-        <p className="text-[rgb(var(--color-text-light))] font-semibold">
-          {!submitted
-            ? "Enter your email to reset your password"
-            : "Check your email for reset instructions"}
+        <p className="text-[rgb(var(--color-text-light))] font-semibold mb-4">
+          {submitted
+            ? "Check your email for reset instructions"
+            : "Enter your email to reset your password"}
         </p>
       </div>
-      {!submitted ? (
+      {submitted ? (
+        <div className="text-center space-y-4">
+          <p className="text-[rgb(var(--color-text-light))] font-semibold">
+            We&apos;ve sent password reset instructions to your email. Please
+            check your inbox.
+          </p>
+          <Button
+            variant="outline"
+            className="w-full text-lg font-semibold"
+            onClick={() => setSubmitted(false)}
+          >
+            Try Again
+          </Button>
+        </div>
+      ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -72,20 +86,6 @@ const ResetPassword = () => {
             )}
           </Button>
         </form>
-      ) : (
-        <div className="text-center space-y-4">
-          <p className="text-[rgb(var(--color-text-light))] font-semibold">
-            We&apos;ve sent password reset instructions to your email. Please
-            check your inbox.
-          </p>
-          <Button
-            variant="outline"
-            className="w-full text-lg font-semibold"
-            onClick={() => setSubmitted(false)}
-          >
-            Try Again
-          </Button>
-        </div>
       )}
     </div>
   );

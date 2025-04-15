@@ -41,8 +41,8 @@ const Benefits = () => {
     },
   ];
   return (
-    <section className="py-16 bg-[rgb(var(--color-bg-light))] relative z-10 rounded-[var(--radius-xl)] mx-6 my-6">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+    <section className="py-16 bg-[rgb(var(--color-bg-light))] relative z-10 rounded-[var(--radius-xl)] mx-1 md:mx-6 my-6">
+      <div className="max-w-7xl mx-auto px-3 md:px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
             Why Choose Our Platform
@@ -56,7 +56,7 @@ const Benefits = () => {
           {benefits.map((benefit, index) => (
             <Card
               key={index}
-              className="md:p-8 p-6 rounded-[7px] border-2 border-[rgb(var(--color-border))] transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group"
+              className="md:p-8 py-8 px-4 rounded-[7px] border-2 border-[rgb(var(--color-border))] transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group"
             >
               <div className="w-16 h-16 bg-[rgb(var(--color-cta)_/_0.1)] rounded-full flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-[rgb(var(--color-cta))] group-hover:scale-110">
                 <benefit.icon className="w-8 h-8 text-[rgb(var(--color-cta))] transition-colors duration-300 group-hover:text-white" />

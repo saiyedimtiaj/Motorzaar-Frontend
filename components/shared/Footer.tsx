@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Car, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import PopularBandsFooter from "./PopularBandsFooter";
 
 const Footer = () => {
   return (
@@ -62,45 +63,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2 sm:mb-4 text-sm sm:text-base">
-              Popular Brands
-            </h3>
-            <ul className="space-y-2 sm:space-y-3">
-              <li>
-                <Link
-                  href="/brands/toyota"
-                  className="text-[rgb(var(--color-text-light))] hover:text-[rgb(var(--color-text))]"
-                >
-                  Toyota
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/brands/ford"
-                  className="text-[rgb(var(--color-text-light))] hover:text-[rgb(var(--color-text))]"
-                >
-                  Ford
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/brands/honda"
-                  className="text-[rgb(var(--color-text-light))] hover:text-[rgb(var(--color-text))]"
-                >
-                  Honda
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/brands/bmw"
-                  className="text-[rgb(var(--color-text-light))] hover:text-[rgb(var(--color-text))]"
-                >
-                  BMW
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <PopularBandsFooter />
 
           <div>
             <h3 className="font-semibold mb-2 sm:mb-4 text-sm sm:text-base">
