@@ -11,11 +11,17 @@ import {
 } from "../ui/dropdown-menu";
 import { ArrowUpDown, Shield, ThumbsUp } from "lucide-react";
 import CarOfferTable from "./CarOfferTable";
+import ListingOffersSkeleton from "./ListingOffersSkeleton";
+import OfferInfoCards from "./OfferInfoCards";
 
 const ListingOffers = () => {
   const { id } = useParams();
-  const { data } = useGetOfferedWithListing(id as string);
-  console.log(data);
+  const { data, isLoading } = useGetOfferedWithListing(id as string);
+
+  if (isLoading) {
+    return <ListingOffersSkeleton />;
+  }
+
   return (
     <div className="space-y-6 md:space-y-8 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,6 +92,7 @@ const ListingOffers = () => {
         </div>
         {/* Offered table */}
         <CarOfferTable offers={data?.data?.listingRequest} />
+        <OfferInfoCards />
       </div>
     </div>
   );

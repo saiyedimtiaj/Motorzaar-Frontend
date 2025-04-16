@@ -6,9 +6,13 @@ import Image from "next/image";
 import { Card } from "../ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import OfferedCarsSkeleton from "./OfferedCarScaleton";
 
 const OfferedCars = () => {
-  const { data } = useGetListingForRequest();
+  const { data, isLoading } = useGetListingForRequest();
+  if (isLoading) {
+    return <OfferedCarsSkeleton />;
+  }
   return (
     <div className="space-y-8">
       {/* Header Section */}
@@ -51,13 +55,20 @@ const OfferedCars = () => {
             >
               {/* Image Section */}
               <div className="relative w-full aspect-[16/10] overflow-hidden">
-                <Image
-                  src={car.images[0]}
-                  alt={`${car.year} ${car.make} ${car.model}`}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw" // 100vw below lg, 50vw at lg and above
-                  className="object-contain transition-transform duration-500 group-hover:scale-110 p-4"
-                />
+                {car.images?.[0] ? (
+                  <Image
+                    src={car.images[0]}
+                    alt={`${car.year} ${car.make} ${car.model}`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-contain transition-transform duration-500 group-hover:scale-110 p-4"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
+                    No Image Available
+                  </div>
+                )}
+
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-semibold text-[rgb(var(--color-text))]">
                   {car.year}
                 </div>

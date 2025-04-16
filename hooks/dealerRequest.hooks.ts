@@ -1,5 +1,6 @@
 import {
   addDeposit,
+  getCustomerOffers,
   getOfferDetails,
   viewDepositDetails,
 } from "@/services/dealerRequest.services";
@@ -31,5 +32,12 @@ export const useGetOfferDetails = (id: string) => {
   return useQuery({
     queryKey: ["SHOW_OFFERE_DEALER_REQUEST_DETAILS"],
     queryFn: async () => await getOfferDetails(id),
+  });
+};
+
+export const useGetCustomerOffers = () => {
+  return useQuery({
+    queryKey: ["GET_CUSTOMER_OFFER"],
+    queryFn: async () => await getCustomerOffers(),
   });
 };

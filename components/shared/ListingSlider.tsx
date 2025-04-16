@@ -14,6 +14,12 @@ const ListingSlider = ({
   altText: string;
 }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const selectedImage = carImages[selectedImageIndex];
+
+  const isValidImage = (src: string | undefined) =>
+    !!src && typeof src === "string" && src.trim() !== "";
+
   return (
     <Card className="overflow-hidden rounded-sm">
       <div className="relative h-[500px] bg-black">
@@ -28,47 +34,55 @@ const ListingSlider = ({
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <Image
-          src={carImages && (carImages[selectedImageIndex] as string)}
-          alt={altText}
-          fill
-          className="object-cover"
-        />
+
+        {isValidImage(selectedImage) && (
+          <Image
+            src={selectedImage}
+            alt={altText}
+            fill
+            className="object-cover"
+          />
+        )}
+
         <button
           className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-3 hover:bg-white"
           onClick={(e) => {
             e.preventDefault();
             setSelectedImageIndex((prev) =>
-              prev < carImages?.length - 1 ? prev + 1 : 0
+              prev < carImages.length - 1 ? prev + 1 : 0
             );
           }}
         >
           <ChevronRight className="w-6 h-6" />
         </button>
+
         <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full">
-          {selectedImageIndex + 1}/{carImages?.length}
+          {selectedImageIndex + 1}/{carImages.length}
         </div>
       </div>
+
       <div className="grid grid-cols-4 gap-2 p-2 bg-gray-100">
-        {carImages?.map((image, index) => (
-          <div
-            key={index}
-            className={cn(
-              "relative h-24 cursor-pointer overflow-hidden rounded-sm border-2",
-              selectedImageIndex === index
-                ? "border-blue-500"
-                : "border-transparent"
-            )}
-            onClick={() => setSelectedImageIndex(index)}
-          >
-            <Image
-              src={image}
-              alt={`${altText} ${index}`}
-              fill
-              className="object-cover"
-            />
-          </div>
-        ))}
+        {carImages.map((image, index) =>
+          isValidImage(image) ? (
+            <div
+              key={index}
+              className={cn(
+                "relative h-24 cursor-pointer overflow-hidden rounded-sm border-2",
+                selectedImageIndex === index
+                  ? "border-blue-500"
+                  : "border-transparent"
+              )}
+              onClick={() => setSelectedImageIndex(index)}
+            >
+              <Image
+                src={image}
+                alt={`${altText} ${index}`}
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : null
+        )}
       </div>
     </Card>
   );

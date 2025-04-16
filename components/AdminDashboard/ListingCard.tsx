@@ -105,6 +105,7 @@ function ListingCard({
             {request.status === "new" && (
               <>
                 <Button
+                  disabled={isPending || listing.status !== "Pending"}
                   variant="outline"
                   className="md:mr-2 flex items-center gap-2"
                   onClick={() => onEdit?.(listing)}
@@ -114,7 +115,7 @@ function ListingCard({
                 </Button>
                 <Button
                   onClick={handleStatus}
-                  disabled={isPending}
+                  disabled={isPending || listing.status !== "Pending"}
                   className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
                 >
                   {isPending ? (

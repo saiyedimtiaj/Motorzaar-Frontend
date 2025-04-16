@@ -179,8 +179,11 @@ export default function AddListingModal({
     e.preventDefault();
 
     const fd = new FormData();
+    if (!uploadedImages || uploadedImages.length === 0) {
+      toast.error("Please upload images!");
+      return;
+    }
 
-    // Add JSON data
     const existingImageUrls = uploadedImages
       .filter((img) => img.file === null && img.preview)
       .map((img) => img.preview);
@@ -213,7 +216,7 @@ export default function AddListingModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl h-[90vh] overflow-hidden flex flex-col px-0 md:px-0">
+      <DialogContent className="max-w-3xl h-[90vh] w-full md:max-w-[90vh] overflow-hidden flex flex-col px-4 md:px-6">
         <ScrollArea>
           <form onSubmit={handleSubmit}>
             <Tabs
@@ -221,7 +224,7 @@ export default function AddListingModal({
               onValueChange={setActiveTab}
               className="flex-1 overflow-hidden flex flex-col h-full"
             >
-              <DialogHeader className="p-0 md:px-0 py-0 border-b">
+              <DialogHeader className="px- py-0 border-b">
                 <DialogTitle className="text-2xl">
                   {mode === "edit" ? "Edit Car Listing" : "Add Car Listing"}
                 </DialogTitle>
@@ -245,7 +248,7 @@ export default function AddListingModal({
                 </div>
               </DialogHeader>
 
-              <TabsContent value="json" className="flex-1 overflow-y-auto p-0">
+              <TabsContent value="json" className="flex-1 overflow-y-auto px-2">
                 <div className="space-y-4">
                   <Label htmlFor="jsonInput">Paste JSON Data</Label>
                   <Textarea
@@ -265,7 +268,7 @@ export default function AddListingModal({
                 </div>
               </TabsContent>
 
-              <TabsContent value="form" className="flex-1 overflow-y-auto p-0">
+              <TabsContent value="form" className="flex-1 overflow-y-auto px-2">
                 <div className="space-y-6">
                   <AddBesicDetails
                     formData={formData}

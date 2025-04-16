@@ -37,9 +37,7 @@ export default function ViewOfferDialog({
   const { user } = useUser();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { mutate, isPending } = useAddDeposit();
-  const { timeLeft } = useCountdown(
-    new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-  );
+  const { timeLeft } = useCountdown(offer?.auctionDate);
 
   if (!offer) return null;
 
@@ -54,8 +52,11 @@ export default function ViewOfferDialog({
       dealerId: user?._id as string,
       listingId: offer?._id,
       userId: offer?.userId,
-      requestId: offer?.requestId as string,
-      status: "Deposit Paid",
+      requestId:
+        typeof offer.requestId === "string"
+          ? offer?.requestId
+          : offer.requestId._id,
+      status: "Approved",
       allInPrice: Number(allInPrice),
     };
     mutate(formData, {
@@ -71,6 +72,8 @@ export default function ViewOfferDialog({
       },
     });
   };
+
+  console.log(offer);
 
   const handleImageScroll = (direction: "prev" | "next") => {
     if (direction === "prev") {
@@ -305,7 +308,12 @@ export default function ViewOfferDialog({
                     Customer Budget
                   </p>
                   <p className="text-xl font-bold text-blue-700">
-                    £35,000 - £45,000
+                    £$
+                    {typeof offer.requestId !== "string" &&
+                      offer?.requestId?.budget[0]}{" "}
+                    - £{" "}
+                    {typeof offer.requestId !== "string" &&
+                      offer?.requestId?.budget[1]}{" "}
                   </p>
                 </div>
               </div>

@@ -13,25 +13,39 @@ import { useUser } from "@/lib/user.provider";
 import ContactDealerModal from "../Modal/ContactDealerModal";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import DepositConfirmationModal from "../Modal/DepositConfirmationModal";
+import VehiclesDetailsScaleton from "../vehicles/VehiclesDetailsScaleton";
 
 const OfferListingDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { listingId } = useParams();
   const { user } = useUser();
-  const { data } = useGetOfferDetails(listingId as string);
+  const { data, isLoading } = useGetOfferDetails(listingId as string);
   const { timeLeft: auctionTimeLeft } = useCountdown(
     data?.data?.listingId?.auctionDate || ""
   );
   const { timeLeft: offerTimeLeft, isExpired } = useCountdown(
     data?.data?.listingId?.auctionDate || ""
   );
+  const [depositModalOpen, setDepositModalOpen] = useState(false);
+  const [depositModalDetails, setDepositModalDetails] = useState<{
+    allInPrice: number;
+    make: string;
+    model: string;
+    fullName: string;
+    id: string;
+  } | null>(null);
 
-  console.log(data?.data?.listingId);
+  if (isLoading) {
+    return <VehiclesDetailsScaleton />;
+  }
+
+  console.log(data);
   return (
     <div className="min-h-screen bg-[rgb(var(--color-bg))] py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between mb-6">
-          <Link href={`/dashboard/offer/${data?.data?._id}`}>
+          <Link href={`/dashboard/offer/${data?.data?.listingId?._id}`}>
             <Button variant="outline">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Cars
@@ -237,8 +251,8 @@ const OfferListingDetails = () => {
 
                     <div
                       className={cn(
-                        "rounded-lg p-4",
-                        isExpired ? "bg-red-50" : "bg-green-50"
+                        "rounded-sm p-4",
+                        isExpired ? "bg-[#F0FDF4]" : "bg-[#F0FDF4]"
                       )}
                     >
                       <h4 className="font-bold mb-2">Offer Status</h4>
@@ -280,7 +294,7 @@ const OfferListingDetails = () => {
                       </Badge>
                     </div>
                     <p className="text-4xl font-bold mb-2">
-                      {/* £{car.maxPrice.toLocaleString()} */}
+                      £{data?.data?.allInPrice.toLocaleString()}
                     </p>
                     <div className="flex items-center gap-2 text-blue-100">
                       <Shield className="w-4 h-4" />
@@ -292,7 +306,7 @@ const OfferListingDetails = () => {
                 </div>
 
                 <div className="space-y-4 mt-5">
-                  {data?.data?.status !== "deposit paid" && (
+                  {data?.data?.status === "Approved" && (
                     <Button
                       className="w-full"
                       size="lg"
@@ -301,11 +315,20 @@ const OfferListingDetails = () => {
                       Contact Dealer
                     </Button>
                   )}
-                  {data?.data?.status !== "deposit paid" ? (
+                  {data?.data?.status === "Approved" ? (
                     <Button
                       className="w-full bg-green-600 hover:bg-green-700"
                       size="lg"
-                      //   onClick={() => setShowDepositConfirmation(true)}
+                      onClick={() => {
+                        setDepositModalDetails({
+                          allInPrice: data?.data?.allInPrice,
+                          fullName: data?.data?.dealerId?.fullName,
+                          id: data?.data?._id,
+                          make: data?.data?.listingId?.make,
+                          model: data?.data?.listingId?.model,
+                        });
+                        setDepositModalOpen(true);
+                      }}
                     >
                       Pay Deposit
                     </Button>
@@ -339,58 +362,13 @@ const OfferListingDetails = () => {
           />
         )}
 
-        {/* <AlertDialog open={showDepositConfirmation} onOpenChange={setShowDepositConfirmation}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-3xl font-bold text-center mb-6">Secure Your Car</AlertDialogTitle>
-          <AlertDialogDescription className="space-y-6">
-            <div className="bg-blue-50 rounded-xl p-6 border-2 border-blue-100">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-blue-900">All-in Price</h3>
-                <p className="text-2xl font-bold text-blue-700">£{car.maxPrice.toLocaleString()}</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-blue-900">Deposit Required</h3>
-                <p className="text-2xl font-bold text-green-600">£199</p>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-xl font-semibold">What happens next?</h4>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border-2 border-gray-100">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <span className="text-blue-600 font-semibold">1</span>
-                  </div>
-                  <p className="text-gray-700">By placing your deposit, you authorize {car.dealerName} to bid for this {car.make} {car.model} at auction on your behalf.</p>
-                </div>
-                
-                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border-2 border-gray-100">
-                  <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <span className="text-green-600 font-semibold">2</span>
-                  </div>
-                  <p className="text-gray-700">If successful, the car is reserved for you at the agreed All-in Price. You'll inspect and test drive before finalizing the purchase.</p>
-                </div>
-                
-                <div className="flex items-start gap-3 p-4 bg-white rounded-xl border-2 border-gray-100">
-                  <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
-                    <span className="text-amber-600 font-semibold">3</span>
-                  </div>
-                  <p className="text-gray-700">If the dealer doesn't win the auction, your £199 deposit is fully refunded within 3 working days.</p>
-                </div>
-              </div>
-            </div>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirmDeposit} className="bg-green-600 hover:bg-green-700">
-            Pay £199 Deposit
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog> */}
+        {depositModalDetails && (
+          <DepositConfirmationModal
+            open={depositModalOpen}
+            onOpenChange={setDepositModalOpen}
+            details={depositModalDetails}
+          />
+        )}
       </div>
     </div>
   );

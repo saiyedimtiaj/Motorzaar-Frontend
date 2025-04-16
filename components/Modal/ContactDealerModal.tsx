@@ -21,9 +21,9 @@ interface ContactDealerProps {
   dealerPhone: string;
   offerNumber: string;
   userProfile: {
-    fullName: string;
-    email: string;
-    phone: string;
+    fullName?: string;
+    email?: string;
+    phone?: string;
   };
 }
 
@@ -61,16 +61,20 @@ export default function ContactDealerModal({
       case "call":
         return (
           <div className="space-y-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-50 p-2 md:p-4 rounded-sm">
               <p className="font-semibold mb-2">
                 Make a note of your Offer Number below, {dealerName} will ask
                 you for it:
               </p>
-              <p className="text-xl font-bold text-blue-700">#{offerNumber}</p>
+              <p className="text-base md:text-xl font-bold text-blue-700">
+                #{offerNumber}
+              </p>
             </div>
             <div>
               <p className="font-semibold mb-2">Call {dealerName}</p>
-              <p className="text-xl font-bold text-blue-700">{dealerPhone}</p>
+              <p className="text-base md:text-xl  font-bold text-blue-700">
+                {dealerPhone}
+              </p>
             </div>
             <p className="text-sm text-gray-500">
               Carvaly uses your details in accordance with our privacy policy.
@@ -191,7 +195,7 @@ export default function ContactDealerModal({
         if (!newOpen) setMode("initial");
       }}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] py-6 px-3 md:px-6 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Contact {dealerName}</DialogTitle>
         </DialogHeader>

@@ -99,3 +99,14 @@ export type TAddDEpositForm = {
   allInPrice: number;
   _id?: string;
 };
+
+export type TDealerRequest = {
+  userId: string;
+  dealerId: TUser;
+  listingId: TListing;
+  requestId: string;
+  status: string;
+  allInPrice: number;
+  _id: string;
+  testDriveDate: Date;
+};

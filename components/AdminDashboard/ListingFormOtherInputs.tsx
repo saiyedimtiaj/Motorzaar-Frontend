@@ -210,7 +210,7 @@ const ListingFormOtherInputs = ({
               setFormData({ ...formData, dealerUrl: e.target.value })
             }
             placeholder="https://www.example.com"
-            className="rounded-[5px]"
+            className="rounded-[5px] mb-5"
           />
         </div>
       </div>

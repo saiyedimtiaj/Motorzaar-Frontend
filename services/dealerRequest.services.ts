@@ -35,3 +35,12 @@ export const getOfferDetails = async (id: string) => {
     return err?.response?.data;
   }
 };
+
+export const getCustomerOffers = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/dealer-request/customer-offer`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};

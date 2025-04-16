@@ -66,6 +66,7 @@ function RequestListingsComponent({
         if (data?.success) {
           toast.success(data?.message);
           setShowAddListing(false);
+          listingRefetch();
         } else {
           toast.error(data?.message);
         }
@@ -115,16 +116,16 @@ function RequestListingsComponent({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-full max-w-[90vh] md:max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl">
+            <DialogTitle className="text-xl md:text-2xl">
               Car Listings for Request #{request._id}
             </DialogTitle>
-            <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+            <div className="flex flex-col md:flex-row items-center md:gap-2 mt-2 text-muted-foreground">
               <span className="font-medium">
                 {request.userId?.fullName || "Unknown User"}
               </span>
-              <span>•</span>
+              <span className="hidden md:block">•</span>
               <span>{request.userId?.email || "No email provided"}</span>
             </div>
           </DialogHeader>
@@ -146,7 +147,7 @@ function RequestListingsComponent({
           <div className="mt-6">
             <div className="bg-muted/50 rounded-lg p-4 mb-6">
               <h3 className="font-semibold mb-2">Search Criteria</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Common criteria for both search types */}
                 <div>
                   <p className="text-sm text-muted-foreground">Search Type</p>

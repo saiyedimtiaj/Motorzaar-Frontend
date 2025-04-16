@@ -40,7 +40,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       </div>
 
       {/* Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 sm:-mt-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 -mt-4 sm:-mt-8">
         <div className="bg-white rounded-2xl shadow-lg border-2 border-[rgb(var(--color-border))] overflow-hidden">
           <div className="px-6 pt-6">
             <div className="bg-gray-100/80 p-1 rounded-sm flex flex-wrap gap-2 w-full">
@@ -72,7 +72,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           </div>
 
           {/* Tab Content */}
-          <div className="px-4 sm:px-6 pb-6">{children}</div>
+          <div className="px-3 sm:px-6 pb-6">{children}</div>
         </div>
       </div>
     </div>

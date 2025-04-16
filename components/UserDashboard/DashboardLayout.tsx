@@ -60,15 +60,18 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
 
       {/* Main Body */}
       <div className="max-w-7xl mx-auto px-1.5 sm:px-6 lg:px-8 -mt-4 sm:-mt-8">
-        {/* 🔧 Modified flex layout for responsiveness */}
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar - Desktop only */}
+          {/* Sidebar - Desktop */}
           <div className="hidden md:block w-64 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-lg border-2 border-[rgb(var(--color-border))] p-4">
               <nav className="space-y-2">
                 {navigation.map((item) => {
                   const Icon = item.icon;
-                  const isActive = pathname === item.id;
+                  const isActive =
+                    item.id === "/dashboard"
+                      ? pathname === "/dashboard" ||
+                        pathname.startsWith("/dashboard/offer")
+                      : pathname.startsWith(item.id);
 
                   return (
                     <Link
@@ -93,11 +96,11 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-              <SheetTrigger asChild>
+              <SheetTrigger asChild className="bg-white">
                 <Button
                   variant="outline"
                   size="icon"
-                  className="fixed bottom-6 bg-white right-6 h-14 w-14 rounded-full shadow-lg"
+                  className="fixed bottom-6 bg-white right-6 h-10 w-10 rounded-full shadow-lg"
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
@@ -109,7 +112,11 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                 <nav className="space-y-2 mt-4">
                   {navigation.map((item) => {
                     const Icon = item.icon;
-                    const isActive = pathname === item.id;
+                    const isActive =
+                      item.id === "/dashboard"
+                        ? pathname === "/dashboard" ||
+                          pathname.startsWith("/dashboard/offer")
+                        : pathname.startsWith(item.id);
 
                     return (
                       <Link

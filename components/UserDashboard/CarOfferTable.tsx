@@ -13,29 +13,22 @@ import { Button } from "../ui/button";
 import ContactDealerModal from "../Modal/ContactDealerModal";
 import { useUser } from "@/lib/user.provider";
 import Link from "next/link";
+import { Badge } from "../ui/badge";
 
-// const getStatusBadgeVariant = (
-//   status: string
-// ):
-//   | "default"
-//   | "secondary"
-//   | "destructive"
-//   | "outline"
-//   | "success"
-//   | "warning" => {
-//   switch (status?.toLowerCase()) {
-//     case "auction live":
-//       return "destructive"; // Red for live auction - matches reference image
-//     case "offer accepted":
-//       return "success"; // Green for success
-//     case "offer pending":
-//       return "warning"; // Yellow/Orange for pending
-//     case "awaiting auction":
-//       return "secondary"; // Grey for awaiting
-//     default:
-//       return "outline"; // Default outline
-//   }
-// };
+const getStatusBadgeClass = (status: string) => {
+  switch (status?.toLowerCase()) {
+    case "auction live":
+      return "bg-red-100 text-red-700 border border-red-300";
+    case "offer accepted":
+      return "bg-green-100 text-green-700 border border-green-300";
+    case "offer pending":
+      return "bg-yellow-100 text-yellow-700 border border-yellow-300";
+    case "awaiting auction":
+      return "bg-gray-100 text-gray-700 border border-gray-300";
+    default:
+      return "bg-white text-gray-600 border border-gray-300";
+  }
+};
 
 const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
   const [selectedDealer, setSelectedDealer] = useState<{
@@ -100,27 +93,18 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                     </div>
                     {/* Middle section: Status, Expiry */}
                     <div className="flex items-center justify-between text-xs">
-                      {/* <Badge
-                        variant={getStatusBadgeVariant(offer.status)}
-                        className="py-0.5 px-2 font-medium"
+                      <Badge
+                        className={`${getStatusBadgeClass(
+                          offer.status
+                        )} text-xs py-0.5 px-2 font-medium`}
                       >
                         {offer.status}
                       </Badge>
-                      {offer.expiryDate && (
-                        <div className="flex items-center gap-1 text-gray-500">
-                          <Clock className="w-3 h-3" />
-                          <span>{timeLeft} left</span>
-                        </div>
-                      )} */}
                     </div>
                     {/* Bottom section: Actions */}
-                    <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t border-gray-100">
+                    <div className="flex flex-col items-center sm:flex-row gap-2 pt-2 border-t border-gray-100">
                       <Link href={`/vehicles/listing/${offer?._id}`}>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="lg:w-auto"
-                        >
+                        <Button variant="outline" className="w-full">
                           View Details
                         </Button>
                       </Link>
@@ -177,25 +161,13 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                 {/* --- Status & Expiry Cell (Desktop only) --- */}
                 <TableCell className="hidden sm:table-cell p-6">
                   <div className="flex flex-col items-start gap-1">
-                    {/* <Badge
-                      variant={getStatusBadgeVariant(offer.status)}
-                      className="text-xs py-0.5 px-2 font-medium"
+                    <Badge
+                      className={`${getStatusBadgeClass(
+                        offer.status
+                      )} text-xs py-0.5 px-2 font-medium`}
                     >
                       {offer.status}
                     </Badge>
-                    {offer.expiryDate &&
-                      !isExpired && ( // Only show expiry if not expired
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
-                          <Clock className="w-3 h-3" />
-                          <span>Expires in: {timeLeft}</span>
-                        </div>
-                      )}
-                    {isExpired && ( // Show expired status
-                      <div className="flex items-center gap-1 text-xs text-red-600">
-                        <Clock className="w-3 h-3" />
-                        <span>Expired</span>
-                      </div>
-                    )} */}
                   </div>
                 </TableCell>
 
