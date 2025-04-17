@@ -46,7 +46,7 @@ export function UnsureSteps({
     case 0:
       return (
         <div className="space-y-8">
-          <div className="bg-white p-8 rounded-xl shadow-sm">
+          <div className="bg-white p-8 rounded-sm shadow-sm">
             <div className="flex items-center gap-2 mb-6">
               <label className="text-xl font-semibold">Budget Range (£)</label>
               <TooltipProvider>
@@ -272,11 +272,11 @@ export function UnsureSteps({
     case 3:
       return (
         <div className="space-y-6">
-          <div className="space-y-4 bg-white p-8 rounded-xl shadow-sm">
+          <div className="space-y-4 bg-white p-8 rounded-sm shadow-sm">
             <label className="text-xl font-semibold">
               Do you have a preferred brand?
             </label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 mt-4">
               <Button
                 variant="outline"
                 className={cn(

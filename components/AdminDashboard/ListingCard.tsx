@@ -5,22 +5,32 @@ import { Clock, Edit, Loader2, Send, Shield } from "lucide-react";
 import { Button } from "../ui/button";
 import { useCountdown } from "@/hooks/use-countdown";
 import { Badge } from "../ui/badge";
-import { useUpdateListingStatus } from "@/hooks/listing.hooks";
+import {
+  useUpdateListing,
+  useUpdateListingStatus,
+} from "@/hooks/listing.hooks";
 import { toast } from "../ui/custom-toast";
+import AddListingModal from "../Modal/add-listing-modal";
+import { Dispatch, SetStateAction, useState } from "react";
 
 function ListingCard({
   listing,
-  onEdit,
   request,
   refetch,
+  selectedListing,
+  setSelectedListing,
 }: {
   listing: TListing;
-  onEdit: (listing: TListing) => void;
   request: TRequest;
   refetch: () => void;
+  selectedListing: TListing;
+  setSelectedListing: Dispatch<SetStateAction<TListing | null>>;
 }) {
   const { timeLeft } = useCountdown(listing?.auctionDate);
+  const [showEditListing, setShowEditListing] = useState(false);
   const { mutate, isPending } = useUpdateListingStatus();
+  const { mutate: updateListing, isPending: isEditPanding } =
+    useUpdateListing();
   const handleStatus = () => {
     mutate(listing._id, {
       onSuccess: (data) => {
@@ -34,10 +44,26 @@ function ListingCard({
     });
   };
 
+  const handleSubmit = (formData: FormData) => {
+    updateListing(
+      { id: selectedListing?._id as string, formData },
+      {
+        onSuccess: (data) => {
+          if (data?.success) {
+            toast.success(data?.message);
+            refetch();
+          } else {
+            toast.error(data?.message);
+          }
+        },
+      }
+    );
+  };
+
   return (
-    <Card className="py-6 px-4 md:p-6">
+    <Card className="py-6 px-4 md:p-6 rounded-sm">
       <div className="flex flex-col md:flex-row items-start gap-6">
-        <div className="relative w-full h-full md:w-48 md:h-32 rounded-lg overflow-hidden">
+        <div className="relative w-full h-full md:w-48 md:h-32 rounded-sm overflow-hidden">
           <Image
             src={listing.images[0]}
             alt={`${listing.make} ${listing.model}`}
@@ -105,17 +131,24 @@ function ListingCard({
             {request.status === "new" && (
               <>
                 <Button
-                  disabled={isPending || listing.status !== "Pending"}
+                  disabled={
+                    isPending || listing.status !== "Pending" || isEditPanding
+                  }
                   variant="outline"
                   className="md:mr-2 flex items-center gap-2"
-                  onClick={() => onEdit?.(listing)}
+                  onClick={() => {
+                    setSelectedListing(listing);
+                    setShowEditListing(true);
+                  }}
                 >
                   <Edit className="w-4 h-4" />
                   Edit Listing
                 </Button>
                 <Button
                   onClick={handleStatus}
-                  disabled={isPending || listing.status !== "Pending"}
+                  disabled={
+                    isPending || listing.status !== "Pending" || isEditPanding
+                  }
                   className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
                 >
                   {isPending ? (
@@ -134,6 +167,17 @@ function ListingCard({
           </div>
         </div>
       </div>
+      {selectedListing && (
+        <AddListingModal
+          open={showEditListing}
+          onOpenChange={setShowEditListing}
+          requestDetails={request}
+          onSubmit={handleSubmit}
+          mode="edit"
+          isPending={isEditPanding}
+          initialData={selectedListing}
+        />
+      )}
     </Card>
   );
 }

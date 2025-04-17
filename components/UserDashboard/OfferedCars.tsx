@@ -13,6 +13,7 @@ const OfferedCars = () => {
   if (isLoading) {
     return <OfferedCarsSkeleton />;
   }
+  console.log(data);
   return (
     <div className="space-y-8">
       {/* Header Section */}
@@ -34,7 +35,9 @@ const OfferedCars = () => {
       {/* Car Grid */}
       {data?.data?.length === 0 ? (
         <p className="text-center text-lg font-semibold text-[rgb(var(--color-text-light))] py-10">
-          No cars match your criteria.
+          Thanks for your request — we&apos;ve received it and are now checking
+          availability directly with our dealer partners. <br /> You will hear
+          back within 24-48 hours.
         </p>
       ) : (
         // --- GRID CHANGE IS HERE ---
@@ -132,12 +135,9 @@ const OfferedCars = () => {
                       Est. Price Range
                     </p>
                     <p className="text-2xl font-bold">
-                      {typeof car.requestId !== "string" &&
-                      car.requestId?.budget?.[0] === car.requestId?.budget?.[1]
-                        ? `£${car.requestId.budget[0].toLocaleString()}`
-                        : typeof car.requestId !== "string"
-                        ? `£${car.requestId.budget[0].toLocaleString()} - £${car.requestId.budget[1].toLocaleString()}`
-                        : "Budget not available"}
+                      {car.min === car.max
+                        ? `£${car.min.toLocaleString()}`
+                        : `£${car.min.toLocaleString()} - £${car.max.toLocaleString()}`}
                     </p>
                   </div>
                   <Link href={`/dashboard/offer/${car?._id}`}>

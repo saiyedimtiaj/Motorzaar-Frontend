@@ -28,7 +28,6 @@ axiosInstance.interceptors.response.use(
   },
   async function (error: { config: any; response: { status: number } }) {
     const config = error?.config;
-    console.log(error.response);
     if (error?.response?.status === 401 && !config?.sent) {
       config.sent = true;
       const res = await getNewAccessToken();

@@ -39,11 +39,14 @@ const featuredBrands = [
 export default function FeaturedBrands() {
   const router = useRouter();
 
-  const handleCarClick = (make: string) => {
+  const handleCarClick = (make: string, model: string) => {
     // Store the selected car details in localStorage
     localStorage.setItem(
       "selectedCar",
-      JSON.stringify({ make: make.toLowerCase() })
+      JSON.stringify({
+        make: make.toLowerCase(),
+        model: model.toLocaleLowerCase,
+      })
     );
 
     // Show success toast
@@ -70,7 +73,7 @@ export default function FeaturedBrands() {
             <Card
               key={index}
               className="group overflow-hidden hover:shadow-xl transition-all duration-300 rounded-2xl border-2 border-[rgb(var(--color-border))]"
-              onClick={() => handleCarClick(car.make)}
+              onClick={() => handleCarClick(car.make, car.model)}
               role="button"
               tabIndex={0}
             >

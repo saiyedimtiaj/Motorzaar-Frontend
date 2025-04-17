@@ -22,7 +22,7 @@ const offerStatuses: Record<
   string,
   { label: string; message: string; color: string }
 > = {
-  "Offer Accepted": {
+  "Deposit Paid": {
     label: "Deposit Paid",
     message:
       "Thank you! Your deposit has been received. We're now working to secure your car at auction.",
@@ -220,7 +220,7 @@ const OfferCards = ({
                 setIsContactOpen(true);
                 setModalDetails({
                   dealerName: offer?.dealerId?.fullName,
-                  dealerPhone: offer?.dealerId?.phone,
+                  dealerPhone: offer?.dealerId?.phone as string,
                   offerNumber: offer?._id,
                 });
               }}

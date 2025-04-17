@@ -13,6 +13,7 @@ import { ArrowUpDown, Shield, ThumbsUp } from "lucide-react";
 import CarOfferTable from "./CarOfferTable";
 import ListingOffersSkeleton from "./ListingOffersSkeleton";
 import OfferInfoCards from "./OfferInfoCards";
+import { TAddDEpositForm } from "@/types";
 
 const ListingOffers = () => {
   const { id } = useParams();
@@ -21,6 +22,12 @@ const ListingOffers = () => {
   if (isLoading) {
     return <ListingOffersSkeleton />;
   }
+
+  const allInPrice = data?.data?.listingRequest?.map(
+    (listing: TAddDEpositForm) => listing.allInPrice
+  );
+  const minPrice = Math.min(...allInPrice);
+  const maxPrice = Math.min(...allInPrice);
 
   return (
     <div className="space-y-6 md:space-y-8 pb-10">
@@ -35,7 +42,9 @@ const ListingOffers = () => {
               </span>
             </h2>
             <span className="block text-base sm:text-lg font-semibold text-[rgb(var(--color-primary))] mt-1">
-              {`From £${data?.data?.listing?.requestId?.budget[0]?.toLocaleString()} - £${data?.data?.listing?.requestId?.budget[1]?.toLocaleString()}`}
+              {minPrice === maxPrice
+                ? `£${minPrice.toLocaleString()}`
+                : `From £${minPrice.toLocaleString()} - £${maxPrice?.toLocaleString()}`}
             </span>
             <p className="text-sm text-gray-600 font-medium mt-1">
               {data?.data?.listingRequest?.length} dealer{" "}

@@ -1,4 +1,8 @@
-import { createRequest, getAllRequests } from "@/services/request.services";
+import {
+  createRequest,
+  getAllRequests,
+  getAllUserRequests,
+} from "@/services/request.services";
 import { FormData } from "@/types/vehicles";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -9,19 +13,16 @@ export const useCreateRequest = () => {
   });
 };
 
-export const useGetAllRequest = ({
-  searchTerm = "",
-  sortBy = "date",
-  page = 1,
-  limit = 5,
-}: {
-  searchTerm?: string;
-  sortBy?: string;
-  page?: number;
-  limit?: number;
-}) => {
+export const useGetAllRequest = () => {
   return useQuery({
-    queryKey: ["ALL_REQUESTS", searchTerm, sortBy, page, limit],
-    queryFn: () => getAllRequests({ searchTerm, sortBy, page, limit }),
+    queryKey: ["ALL_REQUESTS"],
+    queryFn: () => getAllRequests(),
+  });
+};
+
+export const useGetAllUserRequest = () => {
+  return useQuery({
+    queryKey: ["ALL_USER_REQUESTS__"],
+    queryFn: () => getAllUserRequests(),
   });
 };

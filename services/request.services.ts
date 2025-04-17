@@ -12,21 +12,18 @@ export const createRequest = async (formdata: FormData) => {
   }
 };
 
-export const getAllRequests = async ({
-  searchTerm = "",
-  sortBy = "date",
-  page = 1,
-  limit = 5,
-}: {
-  searchTerm?: string;
-  sortBy?: string;
-  page?: number;
-  limit?: number;
-}) => {
+export const getAllRequests = async () => {
   try {
-    const { data } = await axiosInstance.get("/request", {
-      params: { searchTerm, sortBy, page, limit },
-    });
+    const { data } = await axiosInstance.get("/request");
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
+export const getAllUserRequests = async () => {
+  try {
+    const { data } = await axiosInstance.get("/request/user-requests");
     return data;
   } catch (err: any) {
     return err?.response?.data;

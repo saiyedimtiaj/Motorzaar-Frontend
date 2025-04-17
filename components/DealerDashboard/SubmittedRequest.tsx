@@ -32,15 +32,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TableLoading from "../shared/TableLoading";
-import { useGetOfferedListing } from "@/hooks/listing.hooks";
-import { TListing } from "@/types";
+import { TDealerRequest } from "@/types";
 import Image from "next/image";
-import ViewOfferDialog from "../Modal/ViewOfferDialog";
-import RejectDialog from "../Modal/RejectDialog";
 import { offerStatuses } from "@/constant";
+import { useGetSubmitedOfferListings } from "@/hooks/dealerRequest.hooks";
 import { Badge } from "../ui/badge";
+import AuctionDetailsModal from "../Modal/AuctionDetailsModal";
 
-export default function DashboardHome() {
+export default function SubmittedRequest() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -48,19 +47,32 @@ export default function DashboardHome() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { data, isLoading, refetch: refetchListing } = useGetOfferedListing();
-  const [offerModalOpen, setOfferModalOpen] = React.useState(false);
-  const [listingOffer, setListingiOffer] = React.useState<TListing | null>(
-    null
-  );
-  const [rejectModalOpen, setRejectModalOpen] = React.useState(false);
+  const { data, isLoading } = useGetSubmitedOfferListings([
+    "auction-won",
+    "Offer Accepted",
+    "auction-lost",
+    "Deposit Paid",
+    "ready",
+    "Approved",
+  ]);
+  const [isViewModalOpen, setIsViewModalOpen] = React.useState(false);
+  const [requestDelails, setRequestDetails] =
+    React.useState<TDealerRequest | null>(null);
 
-  const columns: ColumnDef<TListing>[] = [
+  const columns: ColumnDef<TDealerRequest>[] = [
+    {
+      accessorKey: "offerNumber",
+      header: "Offer Number",
+      cell: ({ row }) => {
+        const offer = row.original;
+        return <p>{offer?._id}</p>;
+      },
+    },
     {
       accessorKey: "make",
       header: "Vehicle",
       cell: ({ row }) => {
-        const offer: TListing = row.original;
+        const offer = row.original.listingId;
         return (
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 rounded-sm overflow-hidden hidden sm:block">
@@ -92,20 +104,38 @@ export default function DashboardHome() {
       },
     },
     {
-      accessorKey: "auctionDetails",
-      header: "Auction Details",
+      accessorKey: "SubmittedPrice",
+      header: "Submitted Price",
       cell: ({ row }) => {
-        const offer: TListing = row.original;
+        return (
+          <p className="font-semibold tet-sm">£{row.original?.allInPrice}</p>
+        );
+      },
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Submitted Date",
+      cell: ({ row }) => {
+        console.log(row.original?.createdAt);
         return (
           <div>
-            <p className="font-medium">{offer.auctionHouse}</p>
-            <p className="text-sm text-muted-foreground">
-              {new Date(offer.auctionDate).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "long",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+            <p className="font-medium">
+              {new Date(row?.original?.createdAt as string).toLocaleDateString(
+                "en-GB",
+                {
+                  day: "numeric",
+                  month: "short",
+                }
+              )}
+            </p>
+            <p className="text-sm text-[rgb(var(--color-text-light))]">
+              {new Date(row.original?.createdAt as string).toLocaleTimeString(
+                "en-GB",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }
+              )}
             </p>
           </div>
         );
@@ -115,7 +145,7 @@ export default function DashboardHome() {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const offer: TListing = row.original;
+        const offer = row.original;
         const statusInfo = offerStatuses[offer.status] || {
           label: offer.status,
           color: "default",
@@ -131,13 +161,12 @@ export default function DashboardHome() {
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const offer: TListing = row.original;
         return (
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                setOfferModalOpen(true);
-                setListingiOffer(offer);
+                setIsViewModalOpen(true);
+                setRequestDetails(row?.original);
               }}
               size="sm"
               variant="outline"
@@ -148,9 +177,6 @@ export default function DashboardHome() {
             <Button
               size="sm"
               variant="destructive"
-              onClick={() => {
-                setRejectModalOpen(true);
-              }}
               className="bg-[#EF4444] text-white"
             >
               <X className="w-4 h-4 mr-1" />
@@ -276,13 +302,13 @@ export default function DashboardHome() {
           </Button>
         </div>
       </div>
-      <RejectDialog open={rejectModalOpen} setIsOpen={setRejectModalOpen} />
-      {listingOffer && (
-        <ViewOfferDialog
-          offer={listingOffer}
-          onOpenChange={setOfferModalOpen}
-          open={offerModalOpen}
-          refetchListing={refetchListing}
+      {requestDelails && (
+        <AuctionDetailsModal
+          open={isViewModalOpen}
+          onOpenChange={setIsViewModalOpen}
+          car={requestDelails}
+          pageName="submitedRequest"
+          setIsViewModalOpen={setIsViewModalOpen}
         />
       )}
     </div>

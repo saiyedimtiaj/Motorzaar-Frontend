@@ -24,9 +24,9 @@ export default function AdminProfile() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { data, isLoading, refetch } = useGetCurrentUser();
   const { mutate: updateProfile, isPending } = useUpdateProfile();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // Store selected file separately
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // State to store image preview + other fields
   const [formData, setFormData] = useState({

@@ -47,7 +47,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
               <Link
                 href={`/admin`}
                 className={`rounded-sm px-3 sm:px-6 py-2 sm:py-3 flex-1 text-sm sm:text-base flex items-center justify-center gap-2 transition-colors ${
-                  pathname === "/admin"
+                  !pathname.includes("profile")
                     ? "bg-[rgb(var(--color-primary))] text-white"
                     : "text-gray-600 hover:bg-gray-200"
                 }`}

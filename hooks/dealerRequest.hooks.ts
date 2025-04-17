@@ -1,7 +1,10 @@
 import {
   addDeposit,
   getCustomerOffers,
+  getDealerSubmitedListing,
   getOfferDetails,
+  getSubmitedPrice,
+  updateAuctionStatus,
   viewDepositDetails,
 } from "@/services/dealerRequest.services";
 import { TAddDEpositForm } from "@/types";
@@ -39,5 +42,27 @@ export const useGetCustomerOffers = () => {
   return useQuery({
     queryKey: ["GET_CUSTOMER_OFFER"],
     queryFn: async () => await getCustomerOffers(),
+  });
+};
+
+export const useGetSubmitedOfferListings = (status: string[]) => {
+  return useQuery({
+    queryKey: ["GET_DEALER_SUBMITED_OFFER_LISTINGS", status],
+    queryFn: async () => await getDealerSubmitedListing(status),
+  });
+};
+
+export const useUpdateAuctionStatus = () => {
+  return useMutation({
+    mutationKey: ["UPDATE_AUCTION_STATUS"],
+    mutationFn: async (payload: { id: string; status: string }) =>
+      await updateAuctionStatus(payload),
+  });
+};
+
+export const useGetSubmitedPrice = () => {
+  return useQuery({
+    queryKey: ["GET_SUBMITED_PRICE"],
+    queryFn: async () => await getSubmitedPrice(),
   });
 };

@@ -3,6 +3,7 @@ import {
   createUser,
   currentUser,
   forgotPassword,
+  getDealerProfile,
   logInUser,
   TCreateUser,
   updateProfile,
@@ -60,5 +61,12 @@ export const useGetCurrentUser = () => {
   return useQuery({
     queryKey: ["CURRENT_USER"],
     queryFn: async () => await currentUser(),
+  });
+};
+
+export const useGetDealerProfile = (id: string) => {
+  return useQuery({
+    queryKey: ["DEALER_PROFILE"],
+    queryFn: async () => await getDealerProfile(id),
   });
 };

@@ -1,9 +1,11 @@
 import {
   createNewListing,
+  getFreeApprovalListing,
   getListingByRequestId,
   getListingForUser,
   getOfferListing,
   getOfferWithListing,
+  updateListing,
   updateListingStatus,
 } from "@/services/listing.services";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -12,6 +14,14 @@ export const useNewListing = () => {
   return useMutation({
     mutationKey: ["CREATE_LISTING"],
     mutationFn: async (formData: FormData) => await createNewListing(formData),
+  });
+};
+
+export const useUpdateListing = () => {
+  return useMutation({
+    mutationKey: ["UPDATE_LISTING"],
+    mutationFn: async (payload: { id: string; formData: FormData }) =>
+      await updateListing(payload),
   });
 };
 
@@ -29,20 +39,10 @@ export const useUpdateListingStatus = () => {
   });
 };
 
-export const useGetOfferedListing = ({
-  searchTerm = "",
-  sortBy = "date",
-  page = 1,
-  limit = 5,
-}: {
-  searchTerm?: string;
-  sortBy?: string;
-  page?: number;
-  limit?: number;
-}) => {
+export const useGetOfferedListing = () => {
   return useQuery({
-    queryKey: ["GET_OFFERED_LISTING", searchTerm, sortBy, page, limit],
-    queryFn: () => getOfferListing({ searchTerm, sortBy, page, limit }),
+    queryKey: ["GET_OFFERED_LISTING"],
+    queryFn: () => getOfferListing(),
   });
 };
 
@@ -57,5 +57,12 @@ export const useGetOfferedWithListing = (id: string) => {
   return useQuery({
     queryKey: ["OFFERED_WITH_LISTING_____"],
     queryFn: async () => await getOfferWithListing(id),
+  });
+};
+
+export const useGetFreeApprovalListing = () => {
+  return useQuery({
+    queryKey: ["FREE_APPROVAL_LISTING"],
+    queryFn: async () => await getFreeApprovalListing(),
   });
 };

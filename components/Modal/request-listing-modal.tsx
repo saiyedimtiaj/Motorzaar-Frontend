@@ -60,6 +60,8 @@ function RequestListingsComponent({
   const [showAddListing, setShowAddListing] = useState(false);
   const [dealerSubmissions, setDealerSubmissions] = useState([]);
   const { mutate: createListing, isPending } = useNewListing();
+  const [selectedCar, setSelectedCar] = useState<TListing | null>(null);
+  const [selectedListing, setSelectedListing] = useState<TListing | null>(null);
   const handleSubmit = (formData: FormData) => {
     createListing(formData, {
       onSuccess: (data) => {
@@ -544,9 +546,10 @@ function RequestListingsComponent({
                     <ListingCard
                       key={listing._id}
                       listing={listing}
-                      onEdit={handleEditListing}
                       request={request}
                       refetch={listingRefetch}
+                      setSelectedListing={setSelectedListing}
+                      selectedListing={selectedListing!}
                     />
                   ))}
             </div>

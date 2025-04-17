@@ -5,24 +5,19 @@ import { Upload } from "lucide-react";
 import { TAddListingForm } from "@/types";
 import Image from "next/image";
 
+interface UploadedImage {
+  file: File | null;
+  preview: string;
+}
+
 const AddListingUploadImage = ({
   uploadedImages,
   setUploadedImages,
   setFormData,
   formData,
 }: {
-  uploadedImages: {
-    file: File;
-    preview: string;
-  }[];
-  setUploadedImages: Dispatch<
-    SetStateAction<
-      {
-        file: File;
-        preview: string;
-      }[]
-    >
-  >;
+  uploadedImages: UploadedImage[];
+  setUploadedImages: Dispatch<SetStateAction<UploadedImage[]>>;
   setFormData: Dispatch<SetStateAction<TAddListingForm>>;
   formData: TAddListingForm;
 }) => {

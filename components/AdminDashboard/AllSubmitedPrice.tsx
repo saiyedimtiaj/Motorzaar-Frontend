@@ -13,15 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Car, Search } from "lucide-react";
+import { Car, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -32,12 +26,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TableLoading from "../shared/TableLoading";
-import { useGetAllRequest } from "@/hooks/request.hooks";
-import { ViewTimeline } from "./view-timeline";
-import RequestListingsComponent from "../Modal/request-listing-modal";
-import { TRequest } from "@/types";
+import { TDealerRequest } from "@/types";
+import { useGetSubmitedPrice } from "@/hooks/dealerRequest.hooks";
 
-export default function DashboardHome() {
+export default function AllSubmitedPrice() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -45,109 +37,82 @@ export default function DashboardHome() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { data, isLoading } = useGetAllRequest();
-  const [selectedRequestForTimeline, setSelectedRequestForTimeline] =
-    React.useState<null | TRequest>(null);
-  const [isListingOpen, setIsListingOpen] = React.useState(false);
-  const [isTimelineOpen, setIsTimelineOpen] = React.useState(false);
+  const { data, isLoading } = useGetSubmitedPrice();
 
-  const columns: ColumnDef<TRequest>[] = [
+  const columns: ColumnDef<TDealerRequest>[] = [
     {
-      accessorFn: (row) => row.userId.fullName,
+      accessorFn: (row) =>
+        typeof row.userId === "string" ? row.userId : row.userId.fullName,
       accessorKey: "fullName",
       header: "User",
       cell: ({ row }) => {
         const request = row.original;
         return (
-          <div>
-            <p className="font-semibold">{request.userId.fullName}</p>
-            <p className="text-sm text-[rgb(var(--color-text-light))]">
-              {request.userId.email}
-            </p>
-            <p className="text-sm font-medium mt-1">car listings</p>
-          </div>
+          typeof request.userId !== "string" && (
+            <div>
+              <p className="font-semibold">{request?.userId?.fullName}</p>
+              <p className="text-sm text-[rgb(var(--color-text-light))]">
+                {request?.userId?.email}
+              </p>
+            </div>
+          )
         );
       },
     },
     {
-      accessorKey: "details",
-      header: "Car Details",
+      accessorKey: "model",
+      header: "Vehicle",
       cell: ({ row }) => {
         const request = row.original;
         return (
-          <div className="space-y-2">
-            {request.searchType === "specific" ? (
-              <div className="flex items-center gap-2">
-                <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
-                <span className="font-semibold capitalize">
-                  {request.make} {request.model}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
-                <span className="font-semibold">Multiple Car Types</span>
-              </div>
-            )}
-            <p className="text-sm font-medium">
-              Budget: £{request.budget[0].toLocaleString()} - £
-              {request.budget[1].toLocaleString()}
-            </p>
+          <div className="flex items-center gap-2">
+            <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
+            <span className="font-semibold capitalize">
+              {request?.listingId?.make} {request?.listingId?.model}
+            </span>
           </div>
         );
       },
     },
     {
-      accessorKey: "date",
-      header: "	Date",
+      accessorKey: "allInPrice",
+      header: "Submitted Price",
       cell: ({ row }) => {
         const request = row.original;
         return (
-          <div>
-            <p className="font-medium">
-              {new Date(request.createdAt).toLocaleString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </p>
-            <p className="text-sm text-[rgb(var(--color-text-light))]">
-              {new Date(request.createdAt).toLocaleString("en-GB", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-          </div>
+          <p className="font-medium">
+            £{request?.allInPrice?.toLocaleString()}
+          </p>
         );
       },
     },
     {
-      accessorKey: "actions",
-      header: "Actions",
+      accessorKey: "createdAt",
+      header: "Submission Date",
       cell: ({ row }) => {
+        const request = row.original;
         return (
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-              onClick={() => {
-                setSelectedRequestForTimeline(row.original);
-                setIsTimelineOpen(true);
-              }}
-            >
-              View Timeline
-            </Button>
-            <Button
-              size="sm"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-              onClick={() => {
-                setSelectedRequestForTimeline(row.original);
-                setIsListingOpen(true);
-              }}
-            >
-              Add Listing
-            </Button>
-          </div>
+          <p className="font-medium">
+            {new Date(request.createdAt as string).toLocaleString("en-GB", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </p>
+        );
+      },
+    },
+    {
+      accessorKey: "action",
+      header: "Action",
+      cell: () => {
+        return (
+          <Button
+            size="sm"
+            className="bg-blue-500 hover:bg-blue-600 text-white"
+          >
+            View Details
+          </Button>
         );
       },
     },
@@ -188,26 +153,6 @@ export default function DashboardHome() {
             className="pl-9 rounded-[5px]"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4" />
-              Sort by {sorting[0]?.id || "date"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white rounded-sm" align="end">
-            <DropdownMenuItem
-              onClick={() => setSorting([{ id: "date", desc: true }])}
-            >
-              Date
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setSorting([{ id: "budget", desc: true }])}
-            >
-              Budget
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="overflow-x-auto -mx-4 sm:mx-0">
         {isLoading ? (
@@ -269,21 +214,6 @@ export default function DashboardHome() {
           </Button>
         </div>
       </div>
-      {selectedRequestForTimeline && (
-        <ViewTimeline
-          open={isTimelineOpen}
-          onOpenChange={setIsTimelineOpen}
-          request={selectedRequestForTimeline}
-        />
-      )}
-
-      {selectedRequestForTimeline && (
-        <RequestListingsComponent
-          request={selectedRequestForTimeline}
-          open={isListingOpen}
-          onOpenChange={setIsListingOpen}
-        />
-      )}
     </div>
   );
 }

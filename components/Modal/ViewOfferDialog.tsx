@@ -51,7 +51,7 @@ export default function ViewOfferDialog({
     const formData: TAddDEpositForm = {
       dealerId: user?._id as string,
       listingId: offer?._id,
-      userId: offer?.userId,
+      userId: offer?.userId as string,
       requestId:
         typeof offer.requestId === "string"
           ? offer?.requestId

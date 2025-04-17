@@ -7,10 +7,10 @@ import clsx from "clsx";
 
 const tabs = [
   { href: "/admin", label: "New Requests" },
-  { href: "/sent", label: "Sent to Dealer" },
-  { href: "/price-submitted", label: "Price Submitted)" },
-  { href: "/deposits", label: "Active Deposits" },
-  { href: "/progress", label: "Progress Tracking" },
+  { href: "/admin/sent-dealer", label: "Sent to Dealer" },
+  { href: "/admin/price-submitted", label: "Price Submitted)" },
+  { href: "/admin/deposits", label: "Active Deposits" },
+  { href: "/admin/progress", label: "Progress Tracking" },
 ];
 
 const TabsRoutes = () => {

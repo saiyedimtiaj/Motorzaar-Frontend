@@ -129,3 +129,12 @@ export const updateProfile = async (formData: FormData) => {
     return err?.response?.data;
   }
 };
+
+export const getDealerProfile = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/auth/dealer-profile/${id}`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};

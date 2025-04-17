@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Eye, Search, X } from "lucide-react";
+import { ArrowUpDown, Car, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,15 +32,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TableLoading from "../shared/TableLoading";
-import { useGetOfferedListing } from "@/hooks/listing.hooks";
 import { TListing } from "@/types";
-import Image from "next/image";
-import ViewOfferDialog from "../Modal/ViewOfferDialog";
-import RejectDialog from "../Modal/RejectDialog";
-import { offerStatuses } from "@/constant";
-import { Badge } from "../ui/badge";
+import { useGetFreeApprovalListing } from "@/hooks/listing.hooks";
 
-export default function DashboardHome() {
+export default function SentToDealerListing() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -48,113 +43,100 @@ export default function DashboardHome() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { data, isLoading, refetch: refetchListing } = useGetOfferedListing();
-  const [offerModalOpen, setOfferModalOpen] = React.useState(false);
-  const [listingOffer, setListingiOffer] = React.useState<TListing | null>(
-    null
-  );
-  const [rejectModalOpen, setRejectModalOpen] = React.useState(false);
+  const { data, isLoading } = useGetFreeApprovalListing();
 
   const columns: ColumnDef<TListing>[] = [
     {
-      accessorKey: "make",
-      header: "Vehicle",
+      accessorFn: (row) =>
+        typeof row.userId === "string" ? row.userId : row.userId.fullName,
+      accessorKey: "fullName",
+      header: "User",
       cell: ({ row }) => {
-        const offer: TListing = row.original;
-        return (
-          <div className="flex items-center gap-4">
-            <div className="relative w-16 h-16 rounded-sm overflow-hidden hidden sm:block">
-              {offer.images?.[0] ? (
-                <Image
-                  src={offer.images[0]}
-                  alt={`${offer.make} ${offer.model}`}
-                  className="object-cover w-full h-full"
-                  width={200}
-                  height={200}
-                />
-              ) : (
-                <div className="w-16 h-16 flex items-center justify-center bg-gray-200 text-xs text-gray-500 rounded-sm">
-                  No image
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="font-semibold">
-                {offer.make} {offer.model}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {offer.year} • {offer.mileage.toLocaleString()} miles
-              </p>
-              <p className="text-sm font-medium">{offer.registration}</p>
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "auctionDetails",
-      header: "Auction Details",
-      cell: ({ row }) => {
-        const offer: TListing = row.original;
+        const request = row.original;
         return (
           <div>
-            <p className="font-medium">{offer.auctionHouse}</p>
-            <p className="text-sm text-muted-foreground">
-              {new Date(offer.auctionDate).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "long",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+            <p className="font-semibold">
+              {typeof request.userId !== "string" && request.userId.fullName}
+            </p>
+            <p className="text-sm text-[rgb(var(--color-text-light))]">
+              {typeof request.userId !== "string" && request.userId.email}
             </p>
           </div>
         );
       },
     },
     {
-      accessorKey: "status",
-      header: "Status",
+      accessorKey: "details",
+      header: "Car Details",
       cell: ({ row }) => {
-        const offer: TListing = row.original;
-        const statusInfo = offerStatuses[offer.status] || {
-          label: offer.status,
-          color: "default",
-        };
+        const request = row.original;
         return (
-          <Badge className={`${statusInfo.className}`}>
-            {statusInfo.label}
-          </Badge>
+          <div className="space-y-2">
+            {typeof request.requestId !== "string" &&
+            request.requestId?.searchType === "specific" ? (
+              <div className="flex items-center gap-2">
+                <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
+                <span className="font-semibold capitalize">
+                  {request.make} {request.model}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Car className="w-4 h-4 text-[rgb(var(--color-text-light))]" />
+                <span className="font-semibold">Multiple Car Types</span>
+              </div>
+            )}
+            {typeof request.requestId !== "string" && (
+              <p className="text-sm font-medium">
+                Budget: £{request?.requestId?.budget[0].toLocaleString()} - £
+                {request?.requestId?.budget[1].toLocaleString()}
+              </p>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "date",
+      header: "	Date",
+      cell: ({ row }) => {
+        const request = row.original;
+        return (
+          <div>
+            <p className="font-medium">
+              {new Date(request?.sentToDealerDate as string).toLocaleString(
+                "en-GB",
+                {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                }
+              )}
+            </p>
+            <p className="text-sm text-[rgb(var(--color-text-light))]">
+              {new Date(request?.sentToDealerDate as string).toLocaleString(
+                "en-GB",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }
+              )}
+            </p>
+          </div>
         );
       },
     },
     {
       accessorKey: "actions",
       header: "Actions",
-      cell: ({ row }) => {
-        const offer: TListing = row.original;
+      cell: () => {
         return (
           <div className="flex gap-2">
             <Button
-              onClick={() => {
-                setOfferModalOpen(true);
-                setListingiOffer(offer);
-              }}
               size="sm"
-              variant="outline"
+              className="bg-blue-500 hover:bg-blue-600 text-white"
             >
-              <Eye className="w-4 h-4 mr-1" />
-              View
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => {
-                setRejectModalOpen(true);
-              }}
-              className="bg-[#EF4444] text-white"
-            >
-              <X className="w-4 h-4 mr-1" />
-              Reject
+              View Details
             </Button>
           </div>
         );
@@ -188,9 +170,11 @@ export default function DashboardHome() {
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Filter emails..."
-            value={(table.getColumn("make")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("fullName")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("make")?.setFilterValue(event.target.value)
+              table.getColumn("fullName")?.setFilterValue(event.target.value)
             }
             className="pl-9 rounded-[5px]"
           />
@@ -276,15 +260,6 @@ export default function DashboardHome() {
           </Button>
         </div>
       </div>
-      <RejectDialog open={rejectModalOpen} setIsOpen={setRejectModalOpen} />
-      {listingOffer && (
-        <ViewOfferDialog
-          offer={listingOffer}
-          onOpenChange={setOfferModalOpen}
-          open={offerModalOpen}
-          refetchListing={refetchListing}
-        />
-      )}
     </div>
   );
 }

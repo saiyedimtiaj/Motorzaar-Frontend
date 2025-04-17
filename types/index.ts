@@ -1,10 +1,44 @@
 export type TUser = {
+  _id?: string;
   fullName: string;
-  email: string;
-  role: string;
-  _id: string;
-  createdAt?: string;
-  phone: string;
+  email?: string;
+  role?: string;
+  phone?: string;
+  website?: string;
+  avater?: string;
+  createdAt?: Date;
+  addressline1?: string;
+  addressline2?: string;
+  town?: string;
+  country?: string;
+  postcode?: string;
+
+  businessType?: string;
+  companyRegNumber?: string;
+  fcaRegNumber?: string;
+  vatNumber?: string;
+  yearEstablished?: string;
+
+  trustPilotUrl?: string;
+  googleReviewsUrl?: string;
+
+  primaryFirstName?: string;
+  primaryLastName?: string;
+  primaryRole?: string;
+  primaryPhone?: string;
+
+  secondaryFirstName?: string;
+  secondaryLastName?: string;
+  secondaryRole?: string;
+  secondaryEmail?: string;
+  secondaryPhone?: string;
+
+  weekdayStart?: string;
+  weekdayEnd?: string;
+  saturdayStart?: string;
+  saturdayEnd?: string;
+  sundayStart?: string;
+  sundayEnd?: string;
 };
 
 export interface TRequest {
@@ -27,6 +61,8 @@ export interface TRequest {
   createdAt: string;
   _id: string;
   searchType: string;
+  count?: number;
+  listingId?: string;
   status: string;
   timeline: {
     status: string;
@@ -63,7 +99,7 @@ export type TAddListingForm = {
 export type TListing = {
   _id: string;
   status: string;
-  userId: string;
+  userId: string | TUser;
   requestId: string | TRequest;
   make: string;
   model: string;
@@ -88,6 +124,9 @@ export type TListing = {
   carCondition: string;
   dealerUrl: string;
   count?: number;
+  sentToDealerDate?: string;
+  min: number;
+  max: number;
 };
 
 export type TAddDEpositForm = {
@@ -98,15 +137,19 @@ export type TAddDEpositForm = {
   status: string;
   allInPrice: number;
   _id?: string;
+  offerId?: string;
 };
 
 export type TDealerRequest = {
-  userId: string;
+  userId: string | TUser;
   dealerId: TUser;
   listingId: TListing;
   requestId: string;
   status: string;
   allInPrice: number;
   _id: string;
-  testDriveDate: Date;
+  testDriveDate: string;
+  createdAt?: string;
+  depositDate?: string;
+  offerId?: string;
 };

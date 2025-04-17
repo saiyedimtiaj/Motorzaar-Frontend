@@ -12,6 +12,21 @@ export const createNewListing = async (formData: FormData) => {
   }
 };
 
+export const updateListing = async (payload: {
+  id: string;
+  formData: FormData;
+}) => {
+  try {
+    const { data } = await axiosInstance.patch(
+      `/listing/edit/${payload.id}`,
+      payload.formData
+    );
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
 export const getListingByRequestId = async (id: string) => {
   try {
     const { data } = await axiosInstance.get(`/listing/getby-requestId/${id}`);
@@ -30,21 +45,9 @@ export const updateListingStatus = async (id: string) => {
   }
 };
 
-export const getOfferListing = async ({
-  searchTerm = "",
-  sortBy = "date",
-  page = 1,
-  limit = 5,
-}: {
-  searchTerm?: string;
-  sortBy?: string;
-  page?: number;
-  limit?: number;
-}) => {
+export const getOfferListing = async () => {
   try {
-    const { data } = await axiosInstance.get("/listing/offer-listing", {
-      params: { searchTerm, sortBy, page, limit },
-    });
+    const { data } = await axiosInstance.get("/listing/offer-listing");
     return data;
   } catch (err: any) {
     return err?.response?.data;
@@ -54,6 +57,15 @@ export const getOfferListing = async ({
 export const getListingForUser = async () => {
   try {
     const { data } = await axiosInstance.get(`/listing`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
+export const getFreeApprovalListing = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/listing/pre-approval`);
     return data;
   } catch (err: any) {
     return err?.response?.data;

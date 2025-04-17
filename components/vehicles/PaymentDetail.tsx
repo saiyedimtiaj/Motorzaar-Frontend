@@ -38,6 +38,8 @@ const PaymentDetail = () => {
     return <PaymentDetailSkeleton />;
   }
 
+  console.log(data);
+
   return (
     <div className="min-h-screen bg-[rgb(var(--color-bg))] py-8">
       <div className="max-w-3xl mx-auto px-4">
@@ -54,7 +56,7 @@ const PaymentDetail = () => {
               <h2 className="text-2xl font-bold mb-4">Vehicle Details</h2>
               <div className="space-y-4">
                 <div className="relative w-full h-48 rounded-sm overflow-hidden">
-                  {data?.data?.listingId?.image?.[0] ? (
+                  {data?.data?.listingId?.images?.[0] ? (
                     <Image
                       src={data.data.listingId.images[0]}
                       alt={`${data.data.listingId.make} ${data.data.listingId.model}`}

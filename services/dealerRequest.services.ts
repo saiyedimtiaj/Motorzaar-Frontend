@@ -44,3 +44,41 @@ export const getCustomerOffers = async () => {
     return err?.response?.data;
   }
 };
+
+export const getDealerSubmitedListing = async (status: string[]) => {
+  try {
+    const { data } = await axiosInstance.get(`/dealer-request/submited-offer`, {
+      params: {
+        status,
+      },
+    });
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
+export const updateAuctionStatus = async (payload: {
+  id: string;
+  status: string;
+}) => {
+  try {
+    console.log(payload.id);
+    const { data } = await axiosInstance.post(
+      `/dealer-request/auction-status/${payload.id}`,
+      { status: payload.status }
+    );
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
+export const getSubmitedPrice = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/dealer-request/submited-price`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};

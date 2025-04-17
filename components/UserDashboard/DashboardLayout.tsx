@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Car, User, Menu } from "lucide-react";
+import { Car, User, Menu, File } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +23,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const navigation = [
     { id: "/dashboard", label: "Car Offers", icon: Car },
     { id: "/dashboard/your-offers", label: "Your Offers", icon: Car },
+    { id: "/dashboard/your-requests", label: "Your Requests", icon: File },
     { id: "/dashboard/profile", label: "Profile", icon: User },
   ];
 
