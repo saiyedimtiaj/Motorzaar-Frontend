@@ -24,6 +24,7 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
     id: string;
   } | null>(null);
   const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [offerId, setOfferId] = useState("");
   const { user } = useUser();
   console.log(offers);
   return (
@@ -90,7 +91,7 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                             setSelectedDealer({
                               email:
                                 typeof offer?.dealerId !== "string"
-                                  ? offer?.dealerId?.email
+                                  ? (offer?.dealerId?.email as string)
                                   : "",
                               fullName:
                                 typeof offer?.dealerId !== "string"
@@ -151,10 +152,11 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                       <Button
                         onClick={() => {
                           setContactModalOpen(true);
+                          setOfferId(offer?.offerId as string);
                           setSelectedDealer({
                             email:
                               typeof offer?.dealerId !== "string"
-                                ? offer?.dealerId?.email
+                                ? (offer?.dealerId?.email as string)
                                 : "",
                             fullName:
                               typeof offer?.dealerId !== "string"
@@ -190,7 +192,8 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
         }}
         dealerName={selectedDealer?.fullName as string}
         dealerPhone={selectedDealer?.phone as string}
-        offerNumber={selectedDealer?.id as string}
+        dealerEmail={selectedDealer?.email as string}
+        offerNumber={offerId}
       />
     </div>
   );

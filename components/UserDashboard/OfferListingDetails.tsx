@@ -352,8 +352,9 @@ const OfferListingDetails = () => {
             open={isModalOpen}
             onOpenChange={setIsModalOpen}
             dealerName={data?.data?.dealerId.dealerName}
+            dealerEmail={data?.data?.dealerId.email}
             dealerPhone={data?.data?.dealerId.dealerPhone}
-            offerNumber={``}
+            offerNumber={data?.data?.offerId}
             userProfile={{
               email: user?.email,
               fullName: user?.fullName,

@@ -271,7 +271,7 @@ export default function AddListingModal({
               </TabsContent>
             </Tabs>
 
-            <div className="flex justify-end gap-4 mt-4">
+            <div className="flex justify-end gap-4 mt-4 mb-4">
               <Button
                 type="button"
                 variant="outline"

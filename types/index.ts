@@ -64,11 +64,6 @@ export interface TRequest {
   count?: number;
   listingId?: string;
   status: string;
-  timeline: {
-    status: string;
-    date: Date;
-    note: string;
-  }[];
 }
 
 export type TAddListingForm = {
@@ -152,4 +147,11 @@ export type TDealerRequest = {
   createdAt?: string;
   depositDate?: string;
   offerId?: string;
+};
+
+export type TTimeline = {
+  status: string;
+  date: Date;
+  note: string;
+  requestId: string;
 };

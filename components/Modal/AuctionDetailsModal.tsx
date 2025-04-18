@@ -49,7 +49,7 @@ const AuctionDetailsModal = ({
                       </div>
                     </DialogTitle>
                     <div className="text-sm text-muted-foreground mt-2">
-                      Offer Number: {car?.listingId?._id}
+                      Offer Number: {car?.offerId}
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
                       {pageName === "submitedRequest" ? (

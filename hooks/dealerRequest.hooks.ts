@@ -4,6 +4,7 @@ import {
   getDealerSubmitedListing,
   getOfferDetails,
   getSubmitedPrice,
+  getSubmitedPriceByRequestId,
   updateAuctionStatus,
   viewDepositDetails,
 } from "@/services/dealerRequest.services";
@@ -64,5 +65,12 @@ export const useGetSubmitedPrice = () => {
   return useQuery({
     queryKey: ["GET_SUBMITED_PRICE"],
     queryFn: async () => await getSubmitedPrice(),
+  });
+};
+
+export const useGetSubmitedPriceByRequestId = (id: string) => {
+  return useQuery({
+    queryKey: ["GET_SUBMITED_PRICE_BY_REQUEST"],
+    queryFn: async () => await getSubmitedPriceByRequestId(id),
   });
 };

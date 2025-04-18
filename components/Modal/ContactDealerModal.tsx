@@ -11,13 +11,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Phone, MessageSquare } from "lucide-react";
+import { Phone, MessageSquare, Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/custom-toast";
+import { useSendEmailToDealer } from "@/hooks/request.hooks";
 
 interface ContactDealerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   dealerName: string;
+  dealerEmail: string;
   dealerPhone: string;
   offerNumber: string;
   userProfile: {
@@ -33,6 +35,7 @@ export default function ContactDealerModal({
   open,
   onOpenChange,
   dealerName,
+  dealerEmail,
   dealerPhone,
   offerNumber,
   userProfile = {
@@ -42,6 +45,7 @@ export default function ContactDealerModal({
   },
 }: ContactDealerProps) {
   const [mode, setMode] = useState<ContactMode>("initial");
+  const { mutate: sendEmai, isPending } = useSendEmailToDealer();
   const [formData, setFormData] = useState({
     fullName: userProfile.fullName,
     email: userProfile.email,
@@ -51,9 +55,26 @@ export default function ContactDealerModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message sent to dealer");
-    onOpenChange(false);
-    setMode("initial");
+    sendEmai(
+      {
+        dealerEmail,
+        fullName: formData.fullName as string,
+        email: formData.email as string,
+        message: formData.message,
+        phone: formData.message,
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.success) {
+            toast.success(data?.message);
+            onOpenChange(false);
+            setMode("initial");
+          } else {
+            toast.error(data?.message);
+          }
+        },
+      }
+    );
   };
 
   const renderContent = () => {
@@ -148,7 +169,14 @@ export default function ContactDealerModal({
               />
             </div>
             <Button type="submit" className="w-full">
-              Send Message
+              {isPending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  Sending...
+                </span>
+              ) : (
+                " Send Message"
+              )}
             </Button>
             <div className="border-t pt-4">
               <p className="text-center text-gray-600">

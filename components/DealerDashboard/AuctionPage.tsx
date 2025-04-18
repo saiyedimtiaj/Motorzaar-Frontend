@@ -63,7 +63,7 @@ export default function AuctionPage() {
       header: "Offer Number",
       cell: ({ row }) => {
         const offer = row.original;
-        return <p>{offer?._id}</p>;
+        return <p>{offer?.offerId}</p>;
       },
     },
     {

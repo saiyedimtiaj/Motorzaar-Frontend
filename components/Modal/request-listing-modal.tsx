@@ -19,7 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Plus, CheckCircle2, AlertCircle } from "lucide-react";
-import { TListing, TRequest } from "@/types";
+import { TDealerRequest, TListing, TRequest } from "@/types";
 import AddListingModal from "./add-listing-modal";
 import {
   useGetListingsByRequsetId,
@@ -27,6 +27,9 @@ import {
 } from "@/hooks/listing.hooks";
 import { toast } from "../ui/custom-toast";
 import ListingCard from "../AdminDashboard/ListingCard";
+import { useGetSubmitedPriceByRequestId } from "@/hooks/dealerRequest.hooks";
+import SubmitedPriceModalCardSkeleton from "../AdminDashboard/SubmitedPriceModalCardSkeleton";
+import SubmitedPriceModalCard from "../AdminDashboard/SubmitedPriceModalCard";
 
 const requestStatuses = {
   sent: { label: "Sent to Dealer", color: "default" },
@@ -65,6 +68,7 @@ function RequestListingsComponent({
   const handleSubmit = (formData: FormData) => {
     createListing(formData, {
       onSuccess: (data) => {
+        console.log(data);
         if (data?.success) {
           toast.success(data?.message);
           setShowAddListing(false);
@@ -76,7 +80,10 @@ function RequestListingsComponent({
     });
   };
 
-  console.log(data?.data);
+  const { data: submitedPriceData, isLoading: isSubmitedPriceDataLoading } =
+    useGetSubmitedPriceByRequestId(request?._id);
+
+  console.log(submitedPriceData?.data);
 
   useEffect(() => {
     if (request) {
@@ -317,61 +324,18 @@ function RequestListingsComponent({
               )}
 
               {/* Show dealer submission details if available */}
-              {/* {request.status === "price-submitted" &&
-                request.timeline?.find(
-                  (t) => t.status === "price-submitted"
-                ) && (
-                  <Card className="p-6 bg-blue-50 border-blue-200">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-blue-100 rounded-lg">
-                        <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-blue-900">
-                          Dealer Submission
-                        </h3>
-                        <p className="text-sm text-blue-700">
-                          {new Date(
-                            request.timeline.find(
-                              (t) => t.status === "price-submitted"
-                            ).date
-                          ).toLocaleDateString("en-GB", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-blue-700 font-medium">
-                          Submitted Price
-                        </p>
-                        <p className="text-2xl font-bold text-blue-900">
-                          £
-                          {(
-                            request.timeline.find(
-                              (t) => t.status === "price-submitted"
-                            )?.price || 0
-                          ).toLocaleString()}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-blue-700 font-medium">
-                          Dealer
-                        </p>
-                        <p className="text-lg font-semibold text-blue-900">
-                          {request.timeline.find(
-                            (t) => t.status === "price-submitted"
-                          )?.dealerName || "Unknown Dealer"}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                )} */}
+              {isSubmitedPriceDataLoading ? (
+                <SubmitedPriceModalCardSkeleton />
+              ) : data?.data?.length > 0 ? (
+                submitedPriceData?.data?.map((request: TDealerRequest) => (
+                  <SubmitedPriceModalCard
+                    submitedPrice={request}
+                    key={request?._id}
+                  />
+                ))
+              ) : (
+                ""
+              )}
 
               {/* Show deposit information if available */}
               {/* {request.status === "deposit-paid" &&

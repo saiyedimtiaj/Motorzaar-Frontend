@@ -82,3 +82,14 @@ export const getSubmitedPrice = async () => {
     return err?.response?.data;
   }
 };
+
+export const getSubmitedPriceByRequestId = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/dealer-request/submited-price/${id}`
+    );
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};

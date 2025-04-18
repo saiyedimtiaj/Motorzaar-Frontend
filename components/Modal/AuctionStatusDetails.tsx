@@ -226,7 +226,7 @@ const AuctionStatusDetails = ({
                   {date ? format(date, "PPP") : "Set test drive date"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto bg-white p-0">
                 {!showTimeSelect ? (
                   <Calendar
                     mode="single"

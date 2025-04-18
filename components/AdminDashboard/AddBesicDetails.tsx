@@ -74,6 +74,7 @@ const AddBesicDetails = ({
         <div>
           <Label htmlFor="fuel">Fuel Type</Label>
           <Select
+            required
             value={formData.fuel}
             onValueChange={(value) => setFormData({ ...formData, fuel: value })}
           >

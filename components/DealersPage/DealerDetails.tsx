@@ -369,6 +369,7 @@ export default function DealerProfileContent() {
         open={showContactDialog}
         onOpenChange={setShowContactDialog}
         dealerName={data?.data?.fullName}
+        dealerEmail={data?.data?.email}
         dealerPhone={data?.data?.phone}
         offerNumber="N/A"
         userProfile={{

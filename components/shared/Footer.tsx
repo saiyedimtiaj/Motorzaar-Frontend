@@ -4,7 +4,7 @@ import PopularBandsFooter from "./PopularBandsFooter";
 
 const Footer = () => {
   return (
-    <div className="mt-16">
+    <div>
       <footer className="bg-white border-t border-[rgb(var(--color-border))] ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">

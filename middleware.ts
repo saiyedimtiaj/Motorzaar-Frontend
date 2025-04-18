@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getCurrentUser } from "./services/auth.services";
 
-// Publicly accessible authentication routes
+// ✅ Publicly accessible routes
 const AuthRoutes = [
   "/signin",
   "/signup",
@@ -11,9 +11,9 @@ const AuthRoutes = [
   "/change-password",
 ];
 
-// Role-based access control
+// ✅ Role-based route access
 const roleBasedRoutes = {
-  user: [/^\/dashboard/, /^\/subscribe\/[a-zA-Z0-9]+\/booking/],
+  user: [/^\/dashboard/, /^\/dealers\/[a-zA-Z0-9]/, /^\/vehicles\/listing/],
   admin: [/^\/admin/],
   dealer: [/^\/dealer/],
 } as const;
@@ -22,9 +22,9 @@ type Role = keyof typeof roleBasedRoutes;
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  const user = await getCurrentUser(); // Make sure it parses token from cookies or headers
+  const user = await getCurrentUser(); // Should parse cookies or headers internally
 
-  // Allow public routes without authentication
+  // ✅ Public route handling (no user)
   if (!user) {
     const isAuthRoute = AuthRoutes.some((route) => pathname.startsWith(route));
 
@@ -32,6 +32,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    // Redirect to /signin with intended redirect path
     const redirectUrl = new URL("/signin", request.url);
     const redirectPath =
       pathname + (searchParams.toString() ? `?${searchParams}` : "");
@@ -40,7 +41,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Check for valid role-based access
+  // ✅ Authenticated route handling
   const role = user.role as Role;
   const allowedRoutes = roleBasedRoutes[role];
 
@@ -48,17 +49,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // If not allowed, redirect to home
+  // ❌ Unauthorized role access → redirect to home
   return NextResponse.redirect(new URL("/", request.url));
 }
 
-// Apply middleware only to these routes
+// ✅ Define the matcher for middleware to apply only on relevant paths
 export const config = {
   matcher: [
     "/dashboard/:path*",
     "/admin/:path*",
     "/dealer/:path*",
-    "/subscribe/:id*/booking",
+    "/vehicles/listing/:path*",
+    "/dealers/:path*",
     "/signin",
     "/signup",
     "/forgot-password",

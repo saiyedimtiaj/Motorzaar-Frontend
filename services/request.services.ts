@@ -29,3 +29,30 @@ export const getAllUserRequests = async () => {
     return err?.response?.data;
   }
 };
+
+export const getAllRequestTimeline = async (id: string) => {
+  console.log(id);
+  try {
+    const { data } = await axiosInstance.get(`/request/timeline/${id}`);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
+
+type TEmailDealer = {
+  fullName: string;
+  email: string;
+  phone: string;
+  message: string;
+  dealerEmail: string;
+};
+
+export const sendEmailToDealer = async (payload: TEmailDealer) => {
+  try {
+    const { data } = await axiosInstance.post("/email/send-dealer", payload);
+    return data;
+  } catch (err: any) {
+    return err?.response?.data;
+  }
+};
