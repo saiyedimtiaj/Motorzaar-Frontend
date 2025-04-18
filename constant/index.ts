@@ -68,7 +68,6 @@ export const defaultDealer: TUser = {
   town: "",
   country: "",
   postcode: "",
-  dealershipName: "",
   businessType: "",
   companyRegNumber: "",
   fcaRegNumber: "",
@@ -91,8 +90,6 @@ export const defaultDealer: TUser = {
   secondaryPhone: "",
 
   // Business Address
-  townCity: "",
-  county: "",
 
   // Operating Hours
   weekdayStart: "9:00",
