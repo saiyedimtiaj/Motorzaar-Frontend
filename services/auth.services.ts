@@ -52,7 +52,8 @@ export const logInUser = async (userData: {
   }
 };
 
-export const logout = async () => {
+// utils/auth.ts or wherever this is defined
+export const clearAuthCookies = async () => {
   try {
     (await cookies()).delete("accessToken");
     (await cookies()).delete("refreshToken");

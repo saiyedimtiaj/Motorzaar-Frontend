@@ -103,7 +103,7 @@ export default function AddListingModal({
         images: [],
       });
     }
-  }, [initialData, mode]);
+  }, [initialData, mode, open]);
 
   const parseJsonInput = () => {
     try {

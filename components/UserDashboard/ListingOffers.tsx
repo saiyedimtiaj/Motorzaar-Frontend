@@ -14,6 +14,7 @@ import CarOfferTable from "./CarOfferTable";
 import ListingOffersSkeleton from "./ListingOffersSkeleton";
 import OfferInfoCards from "./OfferInfoCards";
 import { TAddDEpositForm } from "@/types";
+import Link from "next/link";
 
 const ListingOffers = () => {
   const { id } = useParams();
@@ -75,12 +76,14 @@ const ListingOffers = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             {/* Change Car Button */}
-            <Button
-              variant="outline"
-              className="text-sm w-full sm:w-auto justify-center"
-            >
-              Change Car
-            </Button>
+            <Link href="/dashboard">
+              <Button
+                variant="outline"
+                className="text-sm w-full sm:w-auto justify-center"
+              >
+                Change Car
+              </Button>
+            </Link>
           </div>
         </div>
 

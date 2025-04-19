@@ -12,6 +12,7 @@ export default function AdminDashboardPage({
     <>
       <Navbar />
       <DashboardLayout>{children}</DashboardLayout>
+      <div className="mb-12"></div>
       <Footer />
     </>
   );

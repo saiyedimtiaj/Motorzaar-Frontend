@@ -4,11 +4,12 @@ import React, { ReactNode } from "react";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
+    <>
       <Navbar />
       {children}
+      <div className="mb-20"></div>
       <Footer />
-    </div>
+    </>
   );
 };
 

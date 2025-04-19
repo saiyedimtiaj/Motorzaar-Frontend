@@ -60,7 +60,6 @@ export const config = {
     "/admin/:path*",
     "/dealer/:path*",
     "/vehicles/listing/:path*",
-    "/dealers/:path*",
     "/signin",
     "/signup",
     "/forgot-password",

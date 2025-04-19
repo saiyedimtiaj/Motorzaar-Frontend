@@ -14,11 +14,13 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/lib/user.provider";
+import { useUserDashboardInfo } from "@/hooks/dashboard.hooks";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const { user } = useUser();
+  const { data, isLoading } = useUserDashboardInfo();
 
   const navigation = [
     { id: "/dashboard", label: "Car Offers", icon: Car },
@@ -41,20 +43,37 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                 Your car buying journey starts here
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-4">
-              <div className="bg-blue-500/30 backdrop-blur-sm rounded-sm p-3 sm:p-4 text-center min-w-[120px]">
-                <p className="text-xs sm:text-sm font-medium text-blue-100">
-                  Active Requests
-                </p>
-                <p className="text-xl sm:text-2xl font-bold">3</p>
+            {isLoading ? (
+              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-4 animate-pulse">
+                <div className="bg-blue-500/30 backdrop-blur-sm rounded-sm p-3 sm:p-4 text-center min-w-[120px]">
+                  <div className="h-4 w-24 bg-blue-100/40 rounded mx-auto mb-2" />
+                  <div className="h-6 w-12 bg-blue-100/40 rounded mx-auto" />
+                </div>
+                <div className="bg-blue-500/30 backdrop-blur-sm rounded-sm p-3 sm:p-4 text-center min-w-[120px]">
+                  <div className="h-4 w-24 bg-blue-100/40 rounded mx-auto mb-2" />
+                  <div className="h-6 w-12 bg-blue-100/40 rounded mx-auto" />
+                </div>
               </div>
-              <div className="bg-blue-500/30 backdrop-blur-sm rounded-sm p-3 sm:p-4 text-center min-w-[120px]">
-                <p className="text-xs sm:text-sm font-medium text-blue-100">
-                  Dealer Offers
-                </p>
-                <p className="text-xl sm:text-2xl font-bold">12</p>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-4">
+                <div className="bg-blue-500/30 backdrop-blur-sm rounded-sm p-3 sm:p-4 text-center min-w-[120px]">
+                  <p className="text-xs sm:text-sm font-medium text-blue-100">
+                    Active Requests
+                  </p>
+                  <p className="text-xl sm:text-2xl font-bold">
+                    {data?.data?.activeRequest}
+                  </p>
+                </div>
+                <div className="bg-blue-500/30 backdrop-blur-sm rounded-sm p-3 sm:p-4 text-center min-w-[120px]">
+                  <p className="text-xs sm:text-sm font-medium text-blue-100">
+                    Dealer Offers
+                  </p>
+                  <p className="text-xl sm:text-2xl font-bold">
+                    {data?.data?.dealerOffer}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

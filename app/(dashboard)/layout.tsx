@@ -10,6 +10,7 @@ export default function DashboardPage({ children }: { children: ReactNode }) {
     <>
       <Navbar />
       <DashboardLayout>{children}</DashboardLayout>
+      <div className="mb-12"></div>
       <Footer />
     </>
   );
