@@ -34,9 +34,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">
+              <h1 className="text-[22px] sm:text-3xl lg:text-4xl font-bold mb-2">
                 Welcome Back, {user?.fullName}
               </h1>
               <p className="text-blue-100 text-base sm:text-lg font-semibold">

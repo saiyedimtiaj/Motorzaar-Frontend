@@ -9,19 +9,38 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
 import UserRequestScaleton from "../Modal/UserRequestScaleton";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import UserRequestModal from "../Modal/UserRequestModal";
 
 const UserAllRequest = () => {
   const { data, isLoading } = useGetAllUserRequest();
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [requestDetails, setRequestDetails] = useState<TRequest | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredRequests = useMemo(() => {
+    if (!searchTerm) return data?.data ?? [];
+
+    return (
+      data?.data?.filter((request: TRequest) => {
+        const make = request.make?.toLowerCase() ?? "";
+        const model = request.model?.toLowerCase() ?? "";
+        const carTypes = request.carTypes?.join(" ").toLowerCase() ?? "";
+
+        const search = searchTerm.toLowerCase();
+
+        return (
+          make.includes(search) ||
+          model.includes(search) ||
+          carTypes.includes(search)
+        );
+      }) ?? []
+    );
+  }, [data, searchTerm]);
 
   if (isLoading) {
     return <UserRequestScaleton />;
   }
-
-  console.log(data);
 
   return (
     <div className="space-y-8">
@@ -34,6 +53,8 @@ const UserAllRequest = () => {
               placeholder="Search by Make, Model, or Type..."
               className="pl-9 w-full"
               aria-label="Search requests"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -41,8 +62,8 @@ const UserAllRequest = () => {
 
       {/* Requests List */}
       <div className="space-y-6">
-        {data?.data?.length > 0 ? (
-          data?.data?.map((request: TRequest) => (
+        {filteredRequests?.length > 0 ? (
+          filteredRequests.map((request: TRequest) => (
             <Card
               key={request?._id}
               className="overflow-hidden rounded-sm border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
@@ -66,9 +87,9 @@ const UserAllRequest = () => {
                         : `Types: ${request?.carTypes?.join(", ") || "Any"}`}
                     </p>
                   </div>
-                  <div className="flex flex-col sm:items-end gap-1 flex-shrink-0">
+                  <div className="flex flex-col items-start gap-1 flex-shrink-0">
                     <Badge
-                      className={`capitalize ${
+                      className={`capitalize w-auto ${
                         request?.status === "Pending"
                           ? "bg-yellow-100 text-yellow-800"
                           : request?.status === "Active"
@@ -191,6 +212,8 @@ const UserAllRequest = () => {
           </Card>
         )}
       </div>
+
+      {/* Modal */}
       {requestDetails && (
         <UserRequestModal
           onOpenChange={setIsDetailsModalOpen}

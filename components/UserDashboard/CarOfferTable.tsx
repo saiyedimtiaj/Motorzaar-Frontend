@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "../ui/table";
 import { TAddDEpositForm } from "@/types";
-import { Star } from "lucide-react";
 import { Button } from "../ui/button";
 import ContactDealerModal from "../Modal/ContactDealerModal";
 import { useUser } from "@/lib/user.provider";
@@ -65,7 +64,6 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                               offer?.dealerId?.fullName}
                           </h3>
                           <div className="flex items-center gap-1.5 mt-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 flex-shrink-0" />
                             <span className="text-sm font-bold text-gray-700"></span>
                           </div>
                         </div>
@@ -79,8 +77,11 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                           {statusInfo.label}
                         </Badge>
                       </div>
-                      <div className="flex flex-col items-center sm:flex-row gap-2 pt-2 border-t border-gray-100">
-                        <Link href={`/vehicles/listing/${offer?._id}`}>
+                      <div className="flex flex-col w-full items-center md:flex-row gap-2 pt-2 border-t border-gray-100">
+                        <Link
+                          className="w-full"
+                          href={`/vehicles/listing/${offer?._id}`}
+                        >
                           <Button variant="outline" className="w-full">
                             View Details
                           </Button>
@@ -119,7 +120,6 @@ const CarOfferTable = ({ offers }: { offers: TAddDEpositForm[] }) => {
                           offer?.dealerId?.fullName}
                       </h3>
                       <div className="flex items-center gap-1.5 mt-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 flex-shrink-0" />
                         <span className="text-sm font-bold text-gray-700"></span>
                       </div>
                     </div>

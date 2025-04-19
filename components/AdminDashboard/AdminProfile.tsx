@@ -102,11 +102,9 @@ export default function AdminProfile() {
               <div className="relative">
                 <Image
                   src={
-                    data?.data?.avater
-                      ? data?.data?.avater
-                      : formData.avatar
+                    formData.avatar
                       ? formData.avatar
-                      : "/avatar.png"
+                      : data?.data?.avater || "/avatar.png"
                   }
                   alt="Profile"
                   className="w-24 h-24 rounded-full object-cover"

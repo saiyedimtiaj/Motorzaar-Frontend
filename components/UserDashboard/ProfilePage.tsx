@@ -19,7 +19,6 @@ import {
   MailCheck,
 } from "lucide-react";
 import { useGetCurrentUser, useUpdateProfile } from "@/hooks/auth.hooks";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UserProfile() {
   const { data, isLoading, refetch } = useGetCurrentUser();
@@ -72,19 +71,33 @@ export default function UserProfile() {
 
   if (isLoading) {
     return (
-      <Card className="py-8 px-4 md:p-8 border-2 border-[rgb(var(--color-border))] rounded-2xl">
-        <div className="max-w-2xl mx-auto space-y-6">
-          <Skeleton className="h-6 w-48 mb-4" />
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-10 w-full" />
-          ))}
+      <Card className="py-8 px-4 md:p-8 border-2 border-[rgb(var(--color-border))] rounded-sm">
+        <div className="max-w-2xl mx-auto space-y-8">
+          {/* Header */}
+          <div className="flex justify-between items-center">
+            <div className="h-8 w-48 bg-gray-200 rounded-sm animate-pulse" />
+            <div className="h-10 w-28 bg-gray-200 rounded-sm animate-pulse" />
+          </div>
+
+          {/* Form Fields */}
+          <div className="space-y-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-4 w-32 bg-gray-200 rounded-sm animate-pulse" />
+                <div className="h-10 w-full bg-gray-200 rounded-sm animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* Button */}
+          <div className="h-10 w-full bg-gray-200 rounded-sm animate-pulse" />
         </div>
       </Card>
     );
   }
 
   return (
-    <Card className="py-8 px-4 shadow-none md:shadow-sm md:p-8 border-0 md:border-2 md:border-[rgb(var(--color-border))] rounded-2xl">
+    <Card className="py-8 px-4 shadow-none md:shadow-sm md:p-8 border-0 md:border-2 md:border-[rgb(var(--color-border))] rounded-sml">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold">Profile Information</h2>
@@ -150,7 +163,7 @@ export default function UserProfile() {
                         [key]: e.target.value,
                       }))
                     }
-                    className="pl-10 rounded-[5px]"
+                    className="pl-10 rounded-smpx]"
                     disabled={!isEditing}
                     readOnly={key === "email"}
                   />

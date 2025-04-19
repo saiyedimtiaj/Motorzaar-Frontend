@@ -133,6 +133,7 @@ export type TAddDEpositForm = {
   allInPrice: number;
   _id?: string;
   offerId?: string;
+  createdAt?: string;
 };
 
 export type TDealerRequest = {

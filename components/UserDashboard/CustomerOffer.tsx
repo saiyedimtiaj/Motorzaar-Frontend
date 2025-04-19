@@ -62,7 +62,6 @@ const CustomerOffer = () => {
     return <CustomerOfferSkeleton />;
   }
 
-  console.log(data);
   return (
     <div className="space-y-4 sm:space-y-6 max-w-[100vw] overflow-x-hidden px-2 sm:px-0">
       {data?.data?.length > 0 ? (
@@ -128,8 +127,6 @@ const OfferCards = ({
   const handleSetTestDriveDate = (dateTime: Date) => {
     console.log(dateTime);
   };
-
-  console.log(offer);
 
   return (
     <Card className="p-4 sm:p-6 w-full rounded-sm">
@@ -245,8 +242,11 @@ const OfferCards = ({
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Contact Dealer
               </Button>
-              <Link href={`/vehicles/listing/${offer?._id}`}>
-                <Button>View Details</Button>
+              <Link
+                className="w-full md:w-auto"
+                href={`/vehicles/listing/${offer?._id}`}
+              >
+                <Button className="w-full md:w-auto">View Details</Button>
               </Link>
               {offer.status === "ready" && (
                 <Popover>
