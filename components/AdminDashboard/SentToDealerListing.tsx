@@ -32,8 +32,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TableLoading from "../shared/TableLoading";
-import { TListing } from "@/types";
+import { TListing, TRequest, TUser } from "@/types";
 import { useGetFreeApprovalListing } from "@/hooks/listing.hooks";
+import SentToDealerDetailsModal from "../Modal/SentToDealerDetailsModal";
 
 export default function SentToDealerListing() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -44,6 +45,9 @@ export default function SentToDealerListing() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const { data, isLoading } = useGetFreeApprovalListing();
+  const [open, setIsOpen] = React.useState(false);
+  const [request, setRequest] = React.useState<TRequest | null>(null);
+  const [user, setUser] = React.useState<TUser | null>(null);
 
   const columns: ColumnDef<TListing>[] = [
     {
@@ -129,12 +133,17 @@ export default function SentToDealerListing() {
     {
       accessorKey: "actions",
       header: "Actions",
-      cell: () => {
+      cell: ({ row }) => {
         return (
           <div className="flex gap-2">
             <Button
               size="sm"
               className="bg-blue-500 hover:bg-blue-600 text-white"
+              onClick={() => {
+                setRequest(row?.original?.requestId as TRequest);
+                setUser(row?.original?.userId as TUser);
+                setIsOpen(true);
+              }}
             >
               View Details
             </Button>
@@ -260,6 +269,14 @@ export default function SentToDealerListing() {
           </Button>
         </div>
       </div>
+      {user && request && (
+        <SentToDealerDetailsModal
+          open={open}
+          onOpenChange={setIsOpen}
+          request={request}
+          userData={user}
+        />
+      )}
     </div>
   );
 }

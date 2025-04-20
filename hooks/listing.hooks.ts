@@ -41,7 +41,7 @@ export const useUpdateListingStatus = () => {
 
 export const useGetOfferedListing = () => {
   return useQuery({
-    queryKey: ["GET_OFFERED_LISTING"],
+    queryKey: ["GET_OFFERED_LISTING_____________________"],
     queryFn: () => getOfferListing(),
   });
 };

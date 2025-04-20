@@ -13,15 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Eye, Search, X } from "lucide-react";
+import { Eye, Search, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -181,6 +175,8 @@ export default function DashboardHome() {
     },
   });
 
+  console.log(data);
+
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
@@ -195,26 +191,6 @@ export default function DashboardHome() {
             className="pl-9 rounded-[5px]"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4" />
-              Sort by {sorting[0]?.id || "date"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white rounded-sm" align="end">
-            <DropdownMenuItem
-              onClick={() => setSorting([{ id: "date", desc: true }])}
-            >
-              Date
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setSorting([{ id: "budget", desc: true }])}
-            >
-              Budget
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="overflow-x-auto -mx-4 sm:mx-0">
         {isLoading ? (

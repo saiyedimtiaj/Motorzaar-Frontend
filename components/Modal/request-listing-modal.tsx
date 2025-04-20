@@ -223,7 +223,7 @@ function RequestListingsComponent({
             <div className="grid grid-cols-1 gap-4">
               {isSubmitedPriceDataLoading ? (
                 <SubmitedPriceModalCardSkeleton />
-              ) : data?.data?.length > 0 ? (
+              ) : submitedPriceData?.data?.length > 0 ? (
                 submitedPriceData?.data?.map((request: TDealerRequest) => (
                   <SubmitedPriceModalCard
                     submitedPrice={request}

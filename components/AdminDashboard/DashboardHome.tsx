@@ -98,8 +98,26 @@ export default function DashboardHome() {
       },
     },
     {
+      accessorKey: "budget",
+      header: "Budget",
+      cell: ({ row }) => {
+        const request = row.original;
+        return (
+          <span>
+            £{request.budget[0].toLocaleString()} - £
+            {request.budget[1].toLocaleString()}
+          </span>
+        );
+      },
+      sortingFn: (a, b) => {
+        const aBudget = (a.original as TRequest).budget[1];
+        const bBudget = (b.original as TRequest).budget[1];
+        return aBudget - bBudget;
+      },
+    },
+    {
       accessorKey: "date",
-      header: "	Date",
+      header: "Date",
       cell: ({ row }) => {
         const request = row.original;
         return (
@@ -119,6 +137,11 @@ export default function DashboardHome() {
             </p>
           </div>
         );
+      },
+      sortingFn: (a, b) => {
+        const aDate = new Date((a.original as TRequest).createdAt).getTime();
+        const bDate = new Date((b.original as TRequest).createdAt).getTime();
+        return aDate - bDate;
       },
     },
     {
@@ -172,6 +195,17 @@ export default function DashboardHome() {
     },
   });
 
+  const toggleSort = (key: string) => {
+    setSorting((prev) => {
+      const current = prev.find((s) => s.id === key);
+      if (current) {
+        return [{ id: key, desc: !current.desc }];
+      } else {
+        return [{ id: key, desc: false }];
+      }
+    });
+  };
+
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
@@ -192,23 +226,26 @@ export default function DashboardHome() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="flex items-center gap-2">
               <ArrowUpDown className="h-4 w-4" />
-              Sort by {sorting[0]?.id || "date"}
+              Sort by {sorting[0]?.id || "None"}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white rounded-sm" align="end">
-            <DropdownMenuItem
-              onClick={() => setSorting([{ id: "date", desc: true }])}
-            >
-              Date
+            <DropdownMenuItem onClick={() => toggleSort("date")}>
+              Date{" "}
+              {sorting[0]?.id === "date" ? (sorting[0]?.desc ? "↓" : "↑") : ""}
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => setSorting([{ id: "budget", desc: true }])}
-            >
-              Budget
+            <DropdownMenuItem onClick={() => toggleSort("budget")}>
+              Budget{" "}
+              {sorting[0]?.id === "budget"
+                ? sorting[0]?.desc
+                  ? "↓"
+                  : "↑"
+                : ""}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <div className="overflow-x-auto -mx-4 sm:mx-0">
         {isLoading ? (
           <TableLoading />
@@ -245,6 +282,7 @@ export default function DashboardHome() {
           </Table>
         )}
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel()?.rows?.length ?? 0} of{" "}
@@ -269,6 +307,7 @@ export default function DashboardHome() {
           </Button>
         </div>
       </div>
+
       {selectedRequestForTimeline && (
         <ViewTimeline
           open={isTimelineOpen}
