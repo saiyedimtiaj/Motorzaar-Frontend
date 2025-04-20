@@ -28,54 +28,51 @@ const AuctionDetailsModal = ({
     label: car.status,
     color: "default",
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <DialogTitle className="text-2xl">
-                      <div className="flex items-center gap-4">
-                        <div>
-                          {car?.listingId?.make} {car?.listingId?.model} (
-                          {car?.listingId?.year})
-                        </div>
-                        <Badge className={`${statusInfo.className}`}>
-                          {statusInfo.label}
-                        </Badge>
-                      </div>
-                    </DialogTitle>
-                    <div className="text-sm text-muted-foreground mt-2">
-                      Offer Number: {car?.offerId}
+                <DialogTitle className="text-2xl">
+                  <div className="flex items-center flex-col md:flex-row gap-2">
+                    <div>
+                      {car?.listingId?.make} {car?.listingId?.model} (
+                      {car?.listingId?.year})
                     </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {pageName === "submitedRequest" ? (
-                        <>
-                          Submitted:{" "}
-                          {new Date(car?.createdAt as string).toLocaleString(
-                            "en-GB"
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          Deposit Paid:{" "}
-                          {new Date(car?.depositDate as string).toLocaleString(
-                            "en-GB"
-                          )}
-                        </>
+                    <Badge className={`${statusInfo.className}`}>
+                      {statusInfo.label}
+                    </Badge>
+                  </div>
+                </DialogTitle>
+                <div className="text-sm text-muted-foreground mt-2">
+                  Offer Number: {car?.offerId}
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  {pageName === "submitedRequest" ? (
+                    <>
+                      Submitted:{" "}
+                      {new Date(car?.createdAt as string).toLocaleString(
+                        "en-GB"
                       )}
-                    </div>
-                    <div className="mt-3">
-                      <div className="text-sm font-medium text-blue-600">
-                        All-in Price
-                      </div>
-                      <div className="text-3xl font-bold text-blue-600">
-                        £{car.allInPrice.toLocaleString()}
-                      </div>
-                    </div>
+                    </>
+                  ) : (
+                    <>
+                      Deposit Paid:{" "}
+                      {new Date(car?.depositDate as string).toLocaleString(
+                        "en-GB"
+                      )}
+                    </>
+                  )}
+                </div>
+                <div className="mt-3">
+                  <div className="text-sm font-medium text-blue-600">
+                    All-in Price
+                  </div>
+                  <div className="text-3xl font-bold text-blue-600">
+                    £{car.allInPrice.toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -262,14 +259,16 @@ const AuctionDetailsModal = ({
           {car?.listingId?.dealerUrl && (
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Dealer Website</h3>
-              <a
-                href={car?.listingId?.dealerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                {car?.listingId?.dealerUrl}
-              </a>
+              <div className="overflow-x-auto">
+                <a
+                  href={car?.listingId?.dealerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-600 hover:underline break-all"
+                >
+                  {car?.listingId?.dealerUrl}
+                </a>
+              </div>
             </div>
           )}
 

@@ -39,8 +39,6 @@ export default function ViewOfferDialog({
   const { mutate, isPending } = useAddDeposit();
   const { timeLeft } = useCountdown(offer?.auctionDate);
 
-  if (!offer) return null;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const price = parseFloat(allInPrice);

@@ -34,7 +34,12 @@ axiosInstance.interceptors.response.use(
       const accessToken = res?.data;
       config.headers["Authorization"] = accessToken;
 
-      (await cookies()).set("accessToken", accessToken);
+      (await cookies()).set("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1500,
+      });
 
       return axiosInstance(config);
     } else {
