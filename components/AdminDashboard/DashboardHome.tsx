@@ -53,7 +53,7 @@ export default function DashboardHome() {
 
   const columns: ColumnDef<TRequest>[] = [
     {
-      accessorFn: (row) => row.userId.fullName,
+      accessorFn: (row) => row.userId.email,
       accessorKey: "fullName",
       header: "User",
       cell: ({ row }) => {

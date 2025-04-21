@@ -172,6 +172,8 @@ export default function SentToDealerListing() {
     },
   });
 
+  console.log(data);
+
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
