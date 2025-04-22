@@ -9,10 +9,13 @@ import { Urbanist } from "next/font/google";
 const urbanist = Urbanist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CarDeals | Find the Best New Car Deals",
+  title: "Motozaar",
   description:
     "Compare new car deals from trusted dealers. Get the best price on your next car purchase.",
   keywords: "car deals, new cars, car comparison, car buying, car prices",
+  // alternates:{
+  //   canonical:""
+  // }
 };
 
 export default function RootLayout({

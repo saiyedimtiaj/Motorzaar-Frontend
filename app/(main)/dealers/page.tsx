@@ -2,7 +2,13 @@ import Benefits from "@/components/DealersPage/Benefits";
 import DealerSignUp from "@/components/DealersPage/DealerSignUp";
 import Hero from "@/components/DealersPage/Hero";
 import HowItWorks from "@/components/DealersPage/HowItWorks";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Dealers - Motorzaar",
+  keywords: "car deals, new cars, car comparison, car buying, car prices",
+};
 
 const page = () => {
   return (

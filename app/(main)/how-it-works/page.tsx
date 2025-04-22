@@ -3,8 +3,14 @@ import Hero from "@/components/HowItWorksPage/Hero";
 import Steps from "@/components/HowItWorksPage/Steps";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "How it works - Motorzaar",
+  keywords: "car deals, new cars, car comparison, car buying, car prices",
+};
 
 const page = () => {
   return (
